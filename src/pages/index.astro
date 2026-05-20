@@ -1,16 +1,19 @@
 ---
 import DefaultLayout from '../layouts/DefaultLayout.astro';
 import { Card } from 'accessible-astro-components';
+// src/assets/profile_falcon.png 이미지를 import합니다.
+import profileFalcon from '../assets/profile_falcon.png';
+import { Image } from 'astro:assets'; // astro:assets의 Image 컴포넌트를 사용합니다.
 ---
 
 <DefaultLayout title="공사 중 - FinalNeoDev">
   <section class="my-32">
     <div class="container">
       <div class="flex flex-col items-center justify-center text-center gap-8">
-        <!-- 메인 아이콘 -->
-        <div class="text-8xl animate-bounce">🚧</div>
+        <div class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden shadow-xl mb-6 border-4 border-white dark:border-gray-800">
+          <Image src={profileFalcon} alt="A watercolor portrait of a peregrine falcon, representing FinalNeoDev" class="object-cover w-full h-full" />
+        </div>
         
-        <!-- 타이틀 & 설명 -->
         <h1 class="text-4xl font-bold md:text-6xl tracking-tight">
           FinalNeoDev <span class="text-gradient">공사 중</span>
         </h1>
@@ -19,7 +22,6 @@ import { Card } from 'accessible-astro-components';
           개발, 테스트, 서비스의 모든 과정을 기록하기 위해 공간을 준비하고 있습니다. 조금만 기다려주세요!
         </p>
 
-        <!-- 진행 상황 보러가기 카드 (템플릿 컴포넌트 활용) -->
         <div class="w-full max-w-md text-left mt-6">
           <Card
             url="https://github.com/finalneodev"
@@ -30,19 +32,25 @@ import { Card } from 'accessible-astro-components';
           </Card>
         </div>
         
-        <!-- 푸터 느낌의 작은 글씨 -->
-        <span class="text-sm text-gray-400 mt-12">
-          © 2026 FinalNeo. All rights reserved.
-        </span>
-      </div>
+        </div>
     </div>
   </section>
 </DefaultLayout>
 
 <style>
-  /* Accessible Astro의 그라디언트 텍스트 효과 적용 */
+  /* 짙은 색의 그라디언트를 정의하여 가독성을 높입니다. */
+  :root {
+    --accent-gradient-strong: linear-gradient(
+      45deg,
+      #1a1a1a, /* 짙은 회색 */
+      #333333,
+      #1a1a1a
+    );
+  }
+
+  /* Accessible Astro의 그라디언트 텍스트 효과 적용 (더 짙게) */
   .text-gradient {
-    background-image: var(--accent-gradient);
+    background-image: var(--accent-gradient-strong);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-size: 400%;
