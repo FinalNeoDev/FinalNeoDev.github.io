@@ -1,0 +1,51 @@
+---
+import DefaultLayout from '../layouts/DefaultLayout.astro';
+import { Card } from 'accessible-astro-components';
+---
+
+<DefaultLayout title="공사 중 - FinalNeoDev">
+  <section class="my-32">
+    <div class="container">
+      <div class="flex flex-col items-center justify-center text-center gap-8">
+        <!-- 메인 아이콘 -->
+        <div class="text-8xl animate-bounce">🚧</div>
+        
+        <!-- 타이틀 & 설명 -->
+        <h1 class="text-4xl font-bold md:text-6xl tracking-tight">
+          FinalNeoDev <span class="text-gradient">공사 중</span>
+        </h1>
+        
+        <p class="text-xl text-gray-6xl max-w-md my-4">
+          개발, 테스트, 서비스의 모든 과정을 기록하기 위해 공간을 준비하고 있습니다. 조금만 기다려주세요!
+        </p>
+
+        <!-- 진행 상황 보러가기 카드 (템플릿 컴포넌트 활용) -->
+        <div class="w-full max-w-md text-left mt-6">
+          <Card
+            url="https://github.com/finalneodev"
+            title="GitHub 저장소 방문하기 🚀"
+            img=""
+          >
+            대신 깃허브에서 진행 중인 프로젝트와 README를 먼저 확인하실 수 있습니다.
+          </Card>
+        </div>
+        
+        <!-- 푸터 느낌의 작은 글씨 -->
+        <span class="text-sm text-gray-400 mt-12">
+          © 2026 FinalNeo. All rights reserved.
+        </span>
+      </div>
+    </div>
+  </section>
+</DefaultLayout>
+
+<style>
+  /* Accessible Astro의 그라디언트 텍스트 효과 적용 */
+  .text-gradient {
+    background-image: var(--accent-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400%;
+    background-position: 0%;
+  }
+</style>
