@@ -82,8 +82,8 @@ export default defineThemeConfig({
       },
       {
         type: 'link',
-        label: 'Go to our GitHub page, opens in new tab',
-        href: 'https://github.com/incluud/accessible-astro-starter',
+        label: 'FinalNeoDev Projects',
+        href: 'https://github.com/FinalNeoDev',
         icon: 'lucide:github',
         external: true,
         excludeFromLauncher: true,
