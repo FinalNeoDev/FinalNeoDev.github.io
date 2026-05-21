@@ -128,7 +128,7 @@ const imageUrl = new URL(imagePath, Astro.site).href
     <main id="main-content" transition:animate="fade">
       <slot />
     </main>
-    {!hideFooter && <Footer />}
+    {hideFooter ? null : <Footer />}
     <style lang="scss" is:global>
       @use 'scss/base/mixins' as *;
 
