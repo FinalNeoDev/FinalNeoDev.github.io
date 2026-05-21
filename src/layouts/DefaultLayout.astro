@@ -38,6 +38,10 @@ interface Props {
    * Set to false to use the title as-is without appending site name
    */
   useTitleTemplate?: boolean
+  /**
+   * Whether to hide the footer (default: false)
+   */
+  hideFooter?: boolean
 }
 
 const {
@@ -48,6 +52,7 @@ const {
   author = themeConfig.seo.author ?? '',
   type = 'website',
   useTitleTemplate = true,
+  hideFooter = false,
 } = Astro.props
 
 // For social sharing, we need the full absolute URL
@@ -123,7 +128,7 @@ const imageUrl = new URL(imagePath, Astro.site).href
     <main id="main-content" transition:animate="fade">
       <slot />
     </main>
-    <Footer />
+    {!hideFooter && <Footer />}
     <style lang="scss" is:global>
       @use 'scss/base/mixins' as *;
 
