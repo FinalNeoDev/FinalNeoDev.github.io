@@ -28,61 +28,29 @@ export default defineThemeConfig({
         href: '/',
       },
       {
-        type: 'link',
-        label: 'Blog',
-        href: '/blog',
-      },
-      {
-        type: 'link',
         label: 'Portfolio',
-        href: '/portfolio',
-      },
-      {
-        label: 'Features',
         type: 'dropdown',
         items: [
           {
-            label: 'Accessibility statement',
-            href: '/accessibility-statement',
+            label: 'Korea Holidays',
+            href: 'https://finalneodev.github.io/Korea_Holidays/',
+            external: true,
           },
           {
-            label: 'Accessible components',
-            href: '/accessible-components',
+            label: 'Korea Holidays (Overtime)',
+            href: 'https://finalneodev.github.io/Korea_Holidays/overtime.html',
+            external: true,
           },
           {
-            label: 'Accessible launcher',
-            href: '/accessible-launcher',
-          },
-          {
-            label: 'Color contrast checker',
-            href: '/color-contrast-checker',
-          },
-          {
-            label: 'Markdown page',
-            href: '/markdown-page',
-          },
-          {
-            label: 'MDX page',
-            href: '/mdx-page',
-          },
-          {
-            label: '404 page',
-            href: '/404',
-          },
-          {
-            label: 'Sitemap',
-            href: '/sitemap',
-          },
-        ],
+            label: 'KERIS OFL Fonts',
+            href: 'https://finalneodev.github.io/KERIS_OFL_fonts/',
+            external: true,
+          }
+        ]
       },
       {
         type: 'link',
-        label: 'Contact',
-        href: '/contact',
-      },
-      {
-        type: 'link',
-        label: 'FinalNeoDev Projects',
+        label: 'GitHub',
         href: 'https://github.com/FinalNeoDev',
         icon: 'lucide:github',
         external: true,
