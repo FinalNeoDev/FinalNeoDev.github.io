@@ -36,12 +36,12 @@ export default defineThemeConfig({
             external: true,
           },
           {
-            label: 'Korea Holidays (Overtime)',
+            label: 'Korea OT',
             href: 'https://finalneodev.github.io/Korea_Holidays/overtime.html',
             external: true,
           },
           {
-            label: 'KERIS OFL Fonts',
+            label: 'Korea Font',
             href: 'https://finalneodev.github.io/KERIS_OFL_fonts/',
             external: true,
           }
