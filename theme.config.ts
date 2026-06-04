@@ -1,5 +1,4 @@
 import { defineThemeConfig } from '@utils/defineThemeConfig'
-import previewImage from '@assets/img/social-preview-image.png'
 import profileFalcon from '@assets/profile_falcon.png'
 
 export default defineThemeConfig({
@@ -11,7 +10,7 @@ export default defineThemeConfig({
     description:
       '개발, 테스트, 서비스의 모든 과정을 기록하는 공간',
     author: 'FinalNeoDev',
-    image: previewImage, // Can also be a string e.g. '/social-preview-image.png',
+    image: profileFalcon, // Can also be a string e.g. '/social-preview-image.png',
   },
   colors: {
     primary: '#d648ff',
