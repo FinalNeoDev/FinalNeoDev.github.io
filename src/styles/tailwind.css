@@ -2,3 +2,8 @@
 
 @source '../../src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}';
 @custom-variant dark (&:where(.darkmode, .darkmode *));
+
+/* Hide image placeholder in Cards when no-image class is present */
+.card.no-image .image {
+  display: none;
+}
