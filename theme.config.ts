@@ -1,16 +1,16 @@
 import { defineThemeConfig } from '@utils/defineThemeConfig'
 import previewImage from '@assets/img/social-preview-image.png'
-import logoImage from '@assets/img/logo.svg'
+import profileFalcon from '@assets/profile_falcon.png'
 
 export default defineThemeConfig({
-  name: 'Accessible Astro',
+  name: 'FinalNeoDev',
   id: 'accessible-astro-starter',
-  logo: logoImage,
+  logo: profileFalcon,
   seo: {
-    title: 'Accessible Astro Starter',
+    title: 'FinalNeoDev',
     description:
-      'An Accessible Starter Theme for Astro including several accessibility features and tools to help you build faster.',
-    author: 'Incluud',
+      '개발, 테스트, 서비스의 모든 과정을 기록하는 공간',
+    author: 'FinalNeoDev',
     image: previewImage, // Can also be a string e.g. '/social-preview-image.png',
   },
   colors: {
