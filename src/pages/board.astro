@@ -2,42 +2,12 @@
 import DefaultLayout from '../layouts/DefaultLayout.astro'
 ---
 
-<DefaultLayout title="Board - FinalNeoDev">
-  <section class="my-12">
-    <div class="container">
-      <div class="flex flex-col items-center justify-center gap-8">
-        <h1 class="text-4xl font-bold md:text-5xl tracking-tight text-center">
-          Bulletin <span class="text-gradient">Board</span>
-        </h1>
-        <div class="w-full max-w-5xl overflow-hidden shadow-2xl rounded-2xl border border-gray-200 dark:border-gray-800">
-          <iframe 
-            src="http://fnnas.synology.me:22003/" 
-            width="100%" 
-            height="700px" 
-            style="border: none; background: #121212; display: block;" 
-            title="FinalNeoDev Bulletin Board">
-          </iframe>
-        </div>
-      </div>
-    </div>
-  </section>
+<DefaultLayout title="Board - FinalNeoDev" hideFooter={true}>
+  <div class="w-full h-[calc(100vh-100px)] min-h-[500px]">
+    <iframe 
+      src="http://fnnas.synology.me:22003/" 
+      class="w-full h-full border-none block"
+      title="FinalNeoDev Bulletin Board">
+    </iframe>
+  </div>
 </DefaultLayout>
-
-<style>
-  :root {
-    --accent-gradient-strong: linear-gradient(
-      45deg,
-      #1a1a1a,
-      #333333,
-      #1a1a1a
-    );
-  }
-
-  .text-gradient {
-    background-image: var(--accent-gradient-strong);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 400%;
-    background-position: 0%;
-  }
-</style>
