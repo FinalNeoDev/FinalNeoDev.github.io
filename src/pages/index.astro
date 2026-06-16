@@ -57,9 +57,8 @@ import { Image } from 'astro:assets'; // astro:assets의 Image 컴포넌트를 �
               </p>
             </Card>
             <Card
-              url="https://finalneodev.github.io/KERIS_OFL_fonts/"
               title="Korea Font"
-              class="no-image"
+              class="no-image disabled-card"
             >
               <p class="text-gray-600 dark:text-gray-400">
                 KERIS 안심 글꼴(OFL) 정보를 제공하고 미리보기 기능을 지원합니다.
@@ -91,5 +90,18 @@ import { Image } from 'astro:assets'; // astro:assets의 Image 컴포넌트를 �
     -webkit-text-fill-color: transparent;
     background-size: 400%;
     background-position: 0%;
+  }
+
+  /* 비활성화된 카드 스타일 (가로줄 및 클릭 방지) */
+  .disabled-card {
+    opacity: 0.6;
+    pointer-events: none;
+    cursor: default;
+  }
+
+  .disabled-card :global(h2),
+  .disabled-card :global(h3),
+  .disabled-card :global(span) {
+    text-decoration: line-through;
   }
 </style>
