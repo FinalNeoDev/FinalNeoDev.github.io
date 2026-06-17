@@ -28,11 +28,6 @@ export default defineThemeConfig({
       },
       {
         type: 'link',
-        label: 'Board',
-        href: '/board',
-      },
-      {
-        type: 'link',
         label: 'Blog',
         href: '/blog',
       },
@@ -56,6 +51,11 @@ export default defineThemeConfig({
             external: true,
           }
         ]
+      },
+      {
+        type: 'link',
+        label: 'Board',
+        href: '/board',
       },
       {
         type: 'link',
