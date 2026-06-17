@@ -105,6 +105,137 @@ const launcherSocialItems = (themeConfig.socials ?? []).map((item) => ({
           </LauncherLink>
         ))}
       </LauncherNav>
-    )
-  }
 </Launcher>
+
+<script>
+  // 런처에 동적 블로그/보드 데이터 연동
+  document.addEventListener('astro:page-load', async () => {
+    const dialog = document.getElementById('site-launcher') as HTMLDialogElement;
+    if (!dialog) return;
+
+    // 중복 주입 방지
+    if (dialog.dataset.dynamicInjected === 'true') return;
+    dialog.dataset.dynamicInjected = 'true';
+
+    const resultsContainer = dialog.querySelector('.results');
+    if (!resultsContainer) return;
+
+    // 블로그와 게시글의 동적 링크들을 담을 LauncherNav 그룹 생성
+    const dynamicNav = document.createElement('div');
+    dynamicNav.className = 'launcher-nav';
+    dynamicNav.setAttribute('role', 'group');
+    dynamicNav.setAttribute('aria-label', 'Blog & Board Posts');
+
+    const labelHeader = document.createElement('p');
+    labelHeader.className = 'launcher-nav-label';
+    labelHeader.textContent = 'Blog & Board';
+    labelHeader.style.cssText = 'color: var(--launcher-subtle-text-color); font-size: var(--launcher-font-size-sm); font-weight: bold; text-transform: uppercase; margin-block: var(--launcher-space-md) var(--launcher-space-xs); padding-inline-start: var(--launcher-space-md);';
+    dynamicNav.appendChild(labelHeader);
+
+    // end-of-results 엘리먼트 앞에 배치
+    const endOfResults = resultsContainer.querySelector('.end-of-results');
+    if (endOfResults) {
+      resultsContainer.insertBefore(dynamicNav, endOfResults);
+    } else {
+      resultsContainer.appendChild(dynamicNav);
+    }
+
+    const BLOG_API_URL = 'https://fnnas.synology.me:22103/node/api/blog';
+    const BOARD_API_URL = 'https://fnnas.synology.me:22103/node/api/posts';
+
+    try {
+      // 1. 블로그 글 목록 조회 및 주입
+      const blogResponse = await fetch(BLOG_API_URL);
+      if (blogResponse.ok) {
+        const blogs = await blogResponse.json();
+        if (Array.isArray(blogs)) {
+          blogs.forEach((post, index) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'launcher-link-wrapper';
+
+            const link = document.createElement('a');
+            link.className = 'launcher-link';
+            link.id = `dynamic-blog-${index}`;
+            link.href = `/blog?slug=${post.slug}`;
+            link.dataset.label = `[Blog] ${post.title}`;
+            
+            // 초기 키워드
+            let keywords = [post.slug, 'blog', '블로그', 'post', '포스트'];
+            link.dataset.keywords = keywords.join(',');
+
+            const iconSpan = document.createElement('span');
+            iconSpan.style.cssText = 'margin-inline-end: var(--launcher-space-sm);';
+            iconSpan.textContent = '📄';
+            link.appendChild(iconSpan);
+
+            const labelSpan = document.createElement('span');
+            labelSpan.textContent = `[Blog] ${post.title}`;
+            link.appendChild(labelSpan);
+
+            wrapper.appendChild(link);
+            dynamicNav.appendChild(wrapper);
+
+            // 백그라운드 상세 정보 패치하여 검색 키워드에 본문내용 포함
+            fetch(`${BLOG_API_URL}/${post.slug}`)
+              .then(res => res.json())
+              .then(detail => {
+                if (detail && detail.content) {
+                  const cleanContent = detail.content.replace(/[#*`_~\n\r]/g, ' ').slice(0, 1000);
+                  keywords.push(cleanContent);
+                  link.dataset.keywords = keywords.join(',');
+                }
+              })
+              .catch(() => {});
+          });
+        }
+      }
+
+      // 2. 게시글 목록 조회 및 주입
+      const boardResponse = await fetch(BOARD_API_URL);
+      if (boardResponse.ok) {
+        const posts = await boardResponse.json();
+        if (Array.isArray(posts)) {
+          posts.forEach((post, index) => {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'launcher-link-wrapper';
+
+            const link = document.createElement('a');
+            link.className = 'launcher-link';
+            link.id = `dynamic-board-${index}`;
+            link.href = `/board?id=${post.id}`;
+            link.dataset.label = `[Board] ${post.title} (${post.author})`;
+            
+            let keywords = [post.author, 'board', '게시판', '보드', 'message', '글'];
+            link.dataset.keywords = keywords.join(',');
+
+            const iconSpan = document.createElement('span');
+            iconSpan.style.cssText = 'margin-inline-end: var(--launcher-space-sm);';
+            iconSpan.textContent = '💬';
+            link.appendChild(iconSpan);
+
+            const labelSpan = document.createElement('span');
+            labelSpan.textContent = `[Board] ${post.title} (${post.author})`;
+            link.appendChild(labelSpan);
+
+            wrapper.appendChild(link);
+            dynamicNav.appendChild(wrapper);
+
+            // 백그라운드 상세 정보 패치하여 검색 키워드에 본문내용 포함
+            fetch(`${BOARD_API_URL}/${post.id}`)
+              .then(res => res.json())
+              .then(detail => {
+                if (detail && detail.content) {
+                  const cleanContent = detail.content.replace(/[\n\r]/g, ' ').slice(0, 1000);
+                  keywords.push(cleanContent);
+                  link.dataset.keywords = keywords.join(',');
+                }
+              })
+              .catch(() => {});
+          });
+        }
+      }
+    } catch (e) {
+      console.error('Failed to inject dynamic items to launcher:', e);
+    }
+  });
+</script>

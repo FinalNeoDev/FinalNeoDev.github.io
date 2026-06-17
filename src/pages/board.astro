@@ -703,7 +703,18 @@ import DefaultLayout from '../layouts/DefaultLayout.astro'
     }
 
     // Initialize Page Load
-    loadPosts();
+    loadPosts().then(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const idParam = urlParams.get('id');
+      if (idParam && postsContainer) {
+        const article = postsContainer.querySelector(`article[data-id="${idParam}"]`);
+        if (article) {
+          togglePostDetail(idParam, article);
+          article.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      }
+    });
   });
 </script>
 

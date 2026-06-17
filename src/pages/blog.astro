@@ -354,7 +354,14 @@ import DefaultLayout from '../layouts/DefaultLayout.astro'
     }
 
     // Initialize
-    loadBlogPosts();
+    loadBlogPosts().then(() => {
+      const urlParams = new URLSearchParams(window.location.search);
+      const slugParam = urlParams.get('slug');
+      if (slugParam) {
+        openBlogModal(slugParam);
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    });
   });
 </script>
 
