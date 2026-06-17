@@ -32,6 +32,11 @@ export default defineThemeConfig({
         href: '/board',
       },
       {
+        type: 'link',
+        label: 'Blog',
+        href: '/blog',
+      },
+      {
         label: 'Portfolio',
         type: 'dropdown',
         items: [

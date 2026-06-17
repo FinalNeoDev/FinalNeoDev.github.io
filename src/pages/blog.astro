@@ -1,0 +1,472 @@
+---
+import DefaultLayout from '../layouts/DefaultLayout.astro'
+---
+
+<DefaultLayout title="Blog - FinalNeoDev" hideFooter={true}>
+  <section class="my-16">
+    <div class="container mx-auto max-w-4xl px-4">
+      
+      <!-- 헤더 섹션 -->
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-12 border-b border-gray-100 dark:border-gray-800 pb-8">
+        <div>
+          <h1 class="text-4xl font-bold md:text-5xl tracking-tight mb-2">
+            Technical <span class="text-gradient">Blog</span>
+          </h1>
+          <p class="text-gray-500 dark:text-gray-400">
+            개발 여정과 유용한 지식들을 마크다운 기반으로 기록하고 공유합니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- 검색 바 -->
+      <div class="flex flex-col sm:flex-row gap-4 mb-8">
+        <div class="relative flex-1">
+          <input 
+            type="text" 
+            id="search-input" 
+            placeholder="제목, 슬러그로 검색..." 
+            class="w-full pl-10 pr-4 py-3 border border-gray-200 dark:border-gray-800 rounded-xl bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+          <div class="absolute inset-y-0 left-3 flex items-center pointer-events-none text-gray-400">
+            🔍
+          </div>
+        </div>
+      </div>
+
+      <!-- 로딩 스켈레톤 -->
+      <div id="blog-loading" class="space-y-4">
+        {[1, 2, 3].map(() => (
+          <div class="p-6 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl animate-pulse space-y-4 shadow-sm">
+            <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded w-1/3"></div>
+            <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-3/4"></div>
+            <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-20"></div>
+          </div>
+        ))}
+      </div>
+
+      <!-- 빈 상태 알림 -->
+      <div id="blog-empty" class="hidden text-center py-20 bg-gray-50 dark:bg-gray-900 rounded-2xl border border-dashed border-gray-200 dark:border-gray-800">
+        <div class="text-4xl mb-4">✍️</div>
+        <p class="text-gray-500 dark:text-gray-400 font-medium">아직 등록된 블로그 글이 없습니다.</p>
+      </div>
+
+      <!-- 블로그 글 리스트 영역 -->
+      <div id="posts-container" class="space-y-6 hidden"></div>
+
+    </div>
+  </section>
+
+  <!-- 블로그 포스트 상세 보기 모달 -->
+  <div id="blog-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <!-- 백드롭 -->
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modal-backdrop"></div>
+    
+    <!-- 모달 바디 -->
+    <div class="relative bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl w-full max-w-3xl mx-4 shadow-2xl transform transition-all scale-95 duration-200 flex flex-col max-h-[85vh]">
+      
+      <!-- 모달 헤더 -->
+      <div class="p-6 border-b border-gray-100 dark:border-gray-800 flex items-start justify-between gap-4">
+        <div>
+          <h3 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-1.5" id="modal-title">포스트 제목</h3>
+          <p class="text-xs text-gray-400 dark:text-gray-500" id="modal-date">작성일 정보</p>
+        </div>
+        <button 
+          id="modal-close-btn" 
+          class="p-2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-900 rounded-lg transition duration-150"
+          aria-label="닫기"
+        >
+          ✕
+        </button>
+      </div>
+      
+      <!-- 모달 본문 영역 (스크롤 가능) -->
+      <div class="p-6 md:p-8 overflow-y-auto flex-1 text-gray-800 dark:text-gray-200">
+        <article class="markdown-body" id="modal-content">
+          <!-- 마크다운 렌더링 결과가 들어갈 공간 -->
+        </article>
+      </div>
+      
+      <!-- 모달 푸터 -->
+      <div class="p-4 border-t border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-gray-900/50 flex justify-end rounded-b-2xl">
+        <button 
+          id="modal-footer-close-btn" 
+          class="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl shadow hover:shadow-md transition duration-200"
+        >
+          닫기
+        </button>
+      </div>
+    </div>
+  </div>
+</DefaultLayout>
+
+<!-- marked.js 마크다운 렌더러 CDN 로드 -->
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js" defer></script>
+
+<script>
+  // 브라우저 측 marked 라이브러리를 안전하게 불러오기 위한 타입 선언
+  declare const marked: any;
+
+  document.addEventListener('astro:page-load', () => {
+    // API Endpoints
+    const API_BASE_URL = 'https://fnnas.synology.me:22103/node/api/blog';
+
+    // State Variables
+    let allPosts = [];
+    let filteredPosts = [];
+    let activeSlug = null;
+
+    // DOM Elements
+    const postsContainer = document.getElementById('posts-container');
+    const loadingEl = document.getElementById('blog-loading');
+    const emptyEl = document.getElementById('blog-empty');
+    const searchInput = document.getElementById('search-input') as HTMLInputElement;
+
+    // Modal DOM Elements
+    const blogModal = document.getElementById('blog-modal');
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    const modalCloseBtn = document.getElementById('modal-close-btn');
+    const modalFooterCloseBtn = document.getElementById('modal-footer-close-btn');
+    const modalTitle = document.getElementById('modal-title');
+    const modalDate = document.getElementById('modal-date');
+    const modalContent = document.getElementById('modal-content');
+
+    // Modal Control Functions
+    async function openBlogModal(slug) {
+      activeSlug = slug;
+      if (!blogModal || !modalTitle || !modalDate || !modalContent) return;
+
+      // 우선 모달 열기
+      blogModal.classList.remove('hidden');
+      document.body.style.overflow = 'hidden'; // 부모 스크롤 방지
+
+      // 메모리에서 포스트 정보 찾기
+      const post = allPosts.find(p => p.slug === slug);
+      if (!post) return;
+
+      modalTitle.textContent = post.title || '제목 없음';
+      modalDate.textContent = `📅 작성일: ${formatDate(post.created_at)} ${post.updated_at ? `| 🔄 수정일: ${formatDate(post.updated_at)}` : ''}`;
+
+      // 캐싱 체크
+      if (!post.content) {
+        modalContent.innerHTML = `<div class="py-12 text-center text-gray-400 dark:text-gray-500 animate-pulse">본문을 불러오는 중...</div>`;
+        
+        try {
+          const response = await fetch(`${API_BASE_URL}/${slug}`);
+          if (!response.ok) throw new Error('상세 내용을 가져오지 못했습니다.');
+          const detail = await response.json();
+          
+          post.content = detail.content || '본문 내용이 비어있습니다.';
+        } catch (error) {
+          console.error(error);
+          modalContent.innerHTML = `<div class="py-8 text-center text-red-500 text-sm">⚠️ 본문을 불러오는 중 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.</div>`;
+          return;
+        }
+      }
+
+      // 마크다운 파싱 렌더링
+      try {
+        if (typeof marked !== 'undefined') {
+          // marked.parse를 사용하여 안전하게 HTML 파싱
+          modalContent.innerHTML = marked.parse(post.content);
+        } else {
+          // marked CDN 로드 지연 시 텍스트 표시 폴백
+          modalContent.innerHTML = `<pre class="whitespace-pre-wrap">${escapeHtml(post.content)}</pre>`;
+        }
+      } catch (e) {
+        console.error('Markdown parse error:', e);
+        modalContent.innerHTML = `<pre class="whitespace-pre-wrap">${escapeHtml(post.content)}</pre>`;
+      }
+    }
+
+    function closeBlogModal() {
+      if (blogModal) {
+        blogModal.classList.add('hidden');
+        document.body.style.overflow = ''; // 스크롤 복원
+      }
+      activeSlug = null;
+    }
+
+    if (modalCloseBtn) modalCloseBtn.addEventListener('click', closeBlogModal);
+    if (modalFooterCloseBtn) modalFooterCloseBtn.addEventListener('click', closeBlogModal);
+    if (modalBackdrop) modalBackdrop.addEventListener('click', closeBlogModal);
+
+    // Escape Key to close modal
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeBlogModal();
+      }
+    });
+
+    // Format Date Helper
+    const formatDate = (dateString) => {
+      if (!dateString) return '';
+      try {
+        const date = new Date(dateString);
+        if (isNaN(date.getTime())) return dateString;
+        return date.toLocaleDateString('ko-KR', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      } catch (e) {
+        return dateString;
+      }
+    };
+
+    // Load Blog Posts
+    async function loadBlogPosts() {
+      if (!postsContainer || !loadingEl || !emptyEl) return;
+
+      postsContainer.classList.add('hidden');
+      emptyEl.classList.add('hidden');
+      loadingEl.classList.remove('hidden');
+
+      try {
+        const response = await fetch(API_BASE_URL);
+        if (!response.ok) throw new Error('Network response was not ok');
+        
+        const result = await response.json();
+        
+        if (Array.isArray(result)) {
+          // 최신순 정렬
+          allPosts = result.sort((a, b) => {
+            const dateA = new Date(a.created_at || 0).getTime();
+            const dateB = new Date(b.created_at || 0).getTime();
+            return dateB - dateA;
+          }).map(post => ({
+            ...post,
+            content: '' // 캐시 필드 초기화
+          }));
+          filteredPosts = [...allPosts];
+          renderPosts();
+        } else {
+          showError('블로그 목록을 가져오는 중 오류가 발생했습니다.');
+        }
+      } catch (error) {
+        console.error('Fetch error:', error);
+        showError('서버와의 통신이 원활하지 않습니다. CORS 설정이나 네트워크를 확인해 주세요.');
+      }
+    }
+
+    // Render Posts to UI
+    function renderPosts() {
+      if (!postsContainer || !loadingEl || !emptyEl) return;
+
+      loadingEl.classList.add('hidden');
+
+      if (filteredPosts.length === 0) {
+        postsContainer.innerHTML = '';
+        postsContainer.classList.add('hidden');
+        emptyEl.classList.remove('hidden');
+        return;
+      }
+
+      emptyEl.classList.add('hidden');
+      postsContainer.classList.remove('hidden');
+
+      postsContainer.innerHTML = filteredPosts.map(post => {
+        const dateVal = post.created_at || post.updated_at || '';
+        const displayDate = dateVal ? formatDate(dateVal) : '날짜 정보 없음';
+
+        return `
+          <article 
+            class="p-6 md:p-8 bg-white dark:bg-gray-900 border border-gray-150 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 group cursor-pointer flex flex-col justify-between" 
+            data-slug="${post.slug}"
+          >
+            <div class="flex flex-col gap-2">
+              <span class="text-xs font-mono text-purple-600 dark:text-purple-400 font-semibold tracking-wide uppercase">
+                ${escapeHtml(post.slug)}
+              </span>
+              <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition duration-150 leading-snug">
+                ${escapeHtml(post.title)}
+              </h2>
+            </div>
+
+            <div class="flex items-center justify-between gap-4 mt-6 pt-4 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-500 dark:text-gray-400">
+              <span class="text-xs text-gray-400 dark:text-gray-500">🕒 ${displayDate}</span>
+              <span class="text-xs font-medium text-purple-600 dark:text-purple-400 group-hover:translate-x-1 transition-transform duration-150 inline-flex items-center gap-1">
+                자세히 읽기 →
+              </span>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    // Article Event Listener
+    if (postsContainer) {
+      postsContainer.addEventListener('click', (e) => {
+        const article = (e.target as HTMLElement).closest('article');
+        if (!article) return;
+        
+        const slug = article.dataset.slug;
+        if (slug) {
+          openBlogModal(slug);
+        }
+      });
+    }
+
+    // Helper: Escape HTML
+    function escapeHtml(text) {
+      if (!text) return '';
+      const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+      };
+      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+    }
+
+    // Helper: Show Error
+    function showError(message) {
+      if (!postsContainer || !loadingEl || !emptyEl) return;
+      loadingEl.classList.add('hidden');
+      emptyEl.classList.add('hidden');
+      postsContainer.classList.remove('hidden');
+
+      postsContainer.innerHTML = `
+        <div class="p-6 bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 text-red-700 dark:text-red-300 rounded-2xl text-center shadow-sm">
+          <div class="text-3xl mb-2">⚠️</div>
+          <p class="font-bold mb-1">통신 장애 발생</p>
+          <p class="text-sm opacity-90">${message}</p>
+        </div>
+      `;
+    }
+
+    // Search and Filter Posts
+    if (searchInput) {
+      searchInput.addEventListener('input', (e) => {
+        const query = (e.target as HTMLInputElement).value.toLowerCase().trim();
+        if (!query) {
+          filteredPosts = [...allPosts];
+        } else {
+          filteredPosts = allPosts.filter(post => 
+            (post.title || '').toLowerCase().includes(query) ||
+            (post.slug || '').toLowerCase().includes(query)
+          );
+        }
+        renderPosts();
+      });
+    }
+
+    // Initialize
+    loadBlogPosts();
+  });
+</script>
+
+<style>
+  :root {
+    --accent-gradient-strong: linear-gradient(
+      45deg,
+      #d648ff,
+      #00d1b7,
+      #d648ff
+    );
+  }
+
+  .text-gradient {
+    background-image: var(--accent-gradient-strong);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400%;
+    background-position: 0%;
+  }
+
+  /* 마크다운 기본 렌더링 스타일 지정 */
+  .markdown-body {
+    font-size: 1.05rem;
+    line-height: 1.75;
+  }
+  
+  .markdown-body :global(h1) {
+    font-size: 1.8em;
+    font-weight: 800;
+    margin-top: 1.8rem;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid var(--brand-neutral);
+    padding-bottom: 0.3rem;
+  }
+  
+  .markdown-body :global(h2) {
+    font-size: 1.45em;
+    font-weight: 700;
+    margin-top: 1.5rem;
+    margin-bottom: 0.6rem;
+  }
+  
+  .markdown-body :global(h3) {
+    font-size: 1.25em;
+    font-weight: 700;
+    margin-top: 1.2rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .markdown-body :global(p) {
+    margin-bottom: 1.2rem;
+    color: #4b5563;
+  }
+  
+  :global(.dark) .markdown-body :global(p) {
+    color: #d1d5db;
+  }
+
+  .markdown-body :global(ul), .markdown-body :global(ol) {
+    margin-left: 1.5rem;
+    margin-bottom: 1.2rem;
+    list-style-type: disc;
+  }
+  
+  .markdown-body :global(ol) {
+    list-style-type: decimal;
+  }
+
+  .markdown-body :global(li) {
+    margin-bottom: 0.4rem;
+  }
+
+  .markdown-body :global(pre) {
+    background: #f3f4f6;
+    padding: 1.2rem;
+    border-radius: 0.75rem;
+    overflow-x: auto;
+    margin-bottom: 1.2rem;
+    font-size: 0.9em;
+  }
+
+  :global(.dark) .markdown-body :global(pre) {
+    background: #1f2937;
+  }
+
+  .markdown-body :global(code) {
+    font-family: monospace;
+    background: #e5e7eb;
+    padding: 0.15rem 0.35rem;
+    border-radius: 0.25rem;
+    font-size: 0.85em;
+  }
+
+  :global(.dark) .markdown-body :global(code) {
+    background: #374151;
+  }
+
+  .markdown-body :global(blockquote) {
+    border-left: 4px solid #d648ff;
+    padding-left: 1.2rem;
+    color: #6b7280;
+    font-style: italic;
+    margin-bottom: 1.2rem;
+    background: #f9fafb;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+
+  :global(.dark) .markdown-body :global(blockquote) {
+    color: #9ca3af;
+    background: #111827/50;
+  }
+</style>
