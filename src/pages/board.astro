@@ -137,17 +137,61 @@ import DefaultLayout from '../layouts/DefaultLayout.astro'
 
     </div>
   </section>
+
+  <!-- 비밀번호 확인 모달 -->
+  <div id="password-modal" class="fixed inset-0 z-50 flex items-center justify-center hidden">
+    <!-- 백드롭 -->
+    <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="modal-backdrop"></div>
+    
+    <!-- 모달 바디 -->
+    <div class="relative bg-white dark:bg-gray-950 border border-gray-200 dark:border-gray-800 rounded-2xl p-6 w-full max-w-md mx-4 shadow-2xl transform transition-all scale-95 duration-200">
+      <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-gray-100" id="modal-title">비밀번호 확인</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-6" id="modal-description">작업을 수행하려면 비밀번호를 입력해 주세요.</p>
+      
+      <form id="password-form" class="space-y-4">
+        <div>
+          <label for="modal-password-input" class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">비밀번호</label>
+          <input 
+            type="password" 
+            id="modal-password-input" 
+            required 
+            placeholder="비밀번호를 입력하세요" 
+            class="w-full px-4 py-3 border border-gray-350 dark:border-gray-750 rounded-xl bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-purple-500"
+          />
+        </div>
+        
+        <div class="flex items-center justify-end gap-3 pt-2">
+          <button 
+            type="button" 
+            id="modal-cancel-btn" 
+            class="px-4 py-2.5 border border-gray-300 dark:border-gray-700 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-100 dark:hover:bg-gray-900 transition duration-200"
+          >
+            취소
+          </button>
+          <button 
+            type="submit" 
+            class="px-5 py-2.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl shadow hover:shadow-md transition duration-200"
+            id="modal-confirm-btn"
+          >
+            확인
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </DefaultLayout>
 
 <script>
   document.addEventListener('astro:page-load', () => {
     // API Endpoints
-    const LIST_URL = 'https://fnnas.synology.me:22002/api.php?action=list';
-    const WRITE_URL = 'https://fnnas.synology.me:22002/api.php?action=write';
+    const API_BASE_URL = 'https://fnnas.synology.me:22103/node/api/posts';
 
     // State Variables
     let allPosts = [];
     let filteredPosts = [];
+    let activeAction = null; // 'edit' or 'delete'
+    let activePostId = null;
+    let editingPostId = null;
 
     // DOM Elements
     const postsContainer = document.getElementById('posts-container');
@@ -159,29 +203,89 @@ import DefaultLayout from '../layouts/DefaultLayout.astro'
     const writeForm = document.getElementById('write-form') as HTMLFormElement;
     const searchInput = document.getElementById('search-input') as HTMLInputElement;
 
-    // Toggle Write Form
+    // Modal DOM Elements
+    const passwordModal = document.getElementById('password-modal');
+    const modalBackdrop = document.getElementById('modal-backdrop');
+    const modalCancelBtn = document.getElementById('modal-cancel-btn');
+    const passwordForm = document.getElementById('password-form') as HTMLFormElement;
+    const modalPasswordInput = document.getElementById('modal-password-input') as HTMLInputElement;
+    const modalTitle = document.getElementById('modal-title');
+    const modalDescription = document.getElementById('modal-description');
+
+    // Toggle Write Form / Reset Form
+    function resetWriteForm() {
+      if (writeForm) writeForm.reset();
+      editingPostId = null;
+      
+      const writeFormHeader = writeFormContainer?.querySelector('h2');
+      if (writeFormHeader) writeFormHeader.textContent = '새로운 게시글 작성';
+      
+      const submitBtn = writeForm?.querySelector('button[type="submit"]') as HTMLButtonElement;
+      if (submitBtn) submitBtn.textContent = '등록하기';
+      
+      if (writeFormContainer) writeFormContainer.classList.add('hidden');
+    }
+
     if (toggleWriteBtn && writeFormContainer) {
       toggleWriteBtn.addEventListener('click', () => {
-        writeFormContainer.classList.toggle('hidden');
-        if (!writeFormContainer.classList.contains('hidden')) {
+        // 이미 폼이 열려있고 작성 모드라면 닫고, 닫혀있으면 작성 모드로 연다
+        if (!writeFormContainer.classList.contains('hidden') && editingPostId === null) {
+          resetWriteForm();
+        } else {
+          resetWriteForm(); // 수정 모드 등 기존 데이터 초기화
+          writeFormContainer.classList.remove('hidden');
           (document.getElementById('author') as HTMLInputElement).focus();
         }
       });
     }
 
-    if (cancelWriteBtn && writeFormContainer) {
-      cancelWriteBtn.addEventListener('click', () => {
-        writeFormContainer.classList.add('hidden');
-        if (writeForm) writeForm.reset();
-      });
+    if (cancelWriteBtn) {
+      cancelWriteBtn.addEventListener('click', resetWriteForm);
     }
+
+    // Modal Control Functions
+    function openPasswordModal(action, postId) {
+      activeAction = action;
+      activePostId = postId;
+      
+      if (passwordModal && modalPasswordInput && modalTitle && modalDescription) {
+        modalPasswordInput.value = '';
+        if (action === 'edit') {
+          modalTitle.textContent = '게시글 수정 비밀번호 확인';
+          modalDescription.textContent = '게시글을 수정하려면 작성 시 지정한 비밀번호를 입력해 주세요.';
+        } else {
+          modalTitle.textContent = '게시글 삭제 비밀번호 확인';
+          modalDescription.textContent = '게시글을 삭제하려면 작성 시 지정한 비밀번호를 입력해 주세요. 이 작업은 되돌릴 수 없습니다.';
+        }
+        passwordModal.classList.remove('hidden');
+        modalPasswordInput.focus();
+      }
+    }
+
+    function closePasswordModal() {
+      if (passwordModal) {
+        passwordModal.classList.add('hidden');
+      }
+      activeAction = null;
+      activePostId = null;
+    }
+
+    if (modalCancelBtn) modalCancelBtn.addEventListener('click', closePasswordModal);
+    if (modalBackdrop) modalBackdrop.addEventListener('click', closePasswordModal);
+
+    // Escape Key to close modal or form
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closePasswordModal();
+      }
+    });
 
     // Format Date Helper
     const formatDate = (dateString) => {
       if (!dateString) return '';
       try {
         const date = new Date(dateString);
-        if (isNaN(date.getTime())) return dateString; // Invalid date format fallback
+        if (isNaN(date.getTime())) return dateString;
         return date.toLocaleDateString('ko-KR', {
           year: 'numeric',
           month: 'long',
@@ -203,18 +307,21 @@ import DefaultLayout from '../layouts/DefaultLayout.astro'
       loadingEl.classList.remove('hidden');
 
       try {
-        const response = await fetch(LIST_URL);
+        const response = await fetch(API_BASE_URL);
         if (!response.ok) throw new Error('Network response was not ok');
         
         const result = await response.json();
         
-        if (result.status === 'success') {
-          // 최신 글이 위로 오도록 정렬 (데이터가 id를 내림차순 또는 오름차순으로 제공할 수 있으므로)
-          allPosts = (result.data || []).sort((a, b) => {
+        if (Array.isArray(result)) {
+          // 최신 글이 위로 오도록 정렬
+          allPosts = result.sort((a, b) => {
             const idA = parseInt(a.id) || 0;
             const idB = parseInt(b.id) || 0;
-            return idB - idA; // Descending order
-          });
+            return idB - idA;
+          }).map(post => ({
+            ...post,
+            content: '' // 초기화: 목록조회 API에는 본문이 없음
+          }));
           filteredPosts = [...allPosts];
           renderPosts();
         } else {
@@ -243,39 +350,228 @@ import DefaultLayout from '../layouts/DefaultLayout.astro'
       postsContainer.classList.remove('hidden');
 
       postsContainer.innerHTML = filteredPosts.map(post => {
-        // 날짜 필드가 데이터베이스에 맞게 parsing되도록 처리 (created_at 또는 reg_date 등)
-        const dateVal = post.created_at || post.reg_date || post.date || '';
+        const dateVal = post.created_at || post.updated_at || '';
         const displayDate = dateVal ? formatDate(dateVal) : '날짜 정보 없음';
 
         return `
-          <article class="p-6 md:p-8 bg-white dark:bg-gray-900 border border-gray-150 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 group">
-            <div class="flex items-start justify-between gap-4 mb-4">
-              <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition duration-150">
-                ${escapeHtml(post.title)}
-              </h2>
+          <article 
+            class="p-6 md:p-8 bg-white dark:bg-gray-900 border border-gray-150 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 group cursor-pointer" 
+            data-id="${post.id}"
+          >
+            <div class="flex items-start justify-between gap-4 mb-2">
+              <div class="flex items-center gap-3">
+                <span class="toggle-arrow text-xs text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-transform duration-200 inline-block">▶</span>
+                <h2 class="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition duration-150">
+                  ${escapeHtml(post.title)}
+                </h2>
+              </div>
               <span class="text-xs text-gray-400 dark:text-gray-500 font-mono self-start py-1 px-2.5 bg-gray-50 dark:bg-gray-950 rounded-lg border border-gray-100 dark:border-gray-900 shadow-inner">
                 No. ${post.id}
               </span>
             </div>
-            
-            <p class="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed whitespace-pre-line break-words text-base">
-              ${escapeHtml(post.content)}
-            </p>
 
-            <div class="flex flex-wrap items-center justify-between gap-4 pt-4 border-t border-gray-100 dark:border-gray-800 text-sm text-gray-500 dark:text-gray-400">
+            <div class="flex flex-wrap items-center justify-between gap-4 mt-3 text-sm text-gray-500 dark:text-gray-400">
               <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-purple-50 dark:bg-purple-950 border border-purple-100 dark:border-purple-900 flex items-center justify-center text-purple-600 dark:text-purple-400 font-bold uppercase text-xs">
-                  ${escapeHtml(post.author.charAt(0))}
+                <div class="w-7 h-7 rounded-full bg-purple-50 dark:bg-purple-950 border border-purple-100 dark:border-purple-900 flex items-center justify-center text-purple-600 dark:text-purple-400 font-bold uppercase text-xs">
+                  ${escapeHtml(post.author ? post.author.charAt(0) : '?')}
                 </div>
                 <span class="font-medium text-gray-800 dark:text-gray-200">${escapeHtml(post.author)}</span>
+                <span class="text-xs text-gray-400 dark:text-gray-500">🕒 ${displayDate}</span>
               </div>
-              <div class="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500">
-                🕒 ${displayDate}
+              
+              <!-- 수정 / 삭제 버튼 -->
+              <div class="flex items-center gap-2">
+                <button class="edit-btn px-2.5 py-1 text-xs font-medium text-gray-500 hover:text-purple-600 dark:text-gray-400 dark:hover:text-purple-400 border border-gray-200 dark:border-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-950 transition duration-150">
+                  수정
+                </button>
+                <button class="delete-btn px-2.5 py-1 text-xs font-medium text-gray-500 hover:text-red-655 dark:text-gray-400 dark:hover:text-red-400 border border-gray-200 dark:border-gray-800 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-950 transition duration-150">
+                  삭제
+                </button>
               </div>
+            </div>
+
+            <!-- 상세 본문 영역 (기본 숨김) -->
+            <div class="post-content-container hidden border-t border-gray-100 dark:border-gray-800 mt-4 pt-4 transition-all duration-300">
+              <p class="post-content-text text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-line break-words text-base"></p>
             </div>
           </article>
         `;
       }).join('');
+    }
+
+    // Toggle Post Detail & Cache
+    async function togglePostDetail(id, articleEl) {
+      const contentContainer = articleEl.querySelector('.post-content-container');
+      const contentEl = articleEl.querySelector('.post-content-text');
+      const toggleArrow = articleEl.querySelector('.toggle-arrow');
+      if (!contentContainer || !contentEl) return;
+      
+      const isExpanded = !contentContainer.classList.contains('hidden');
+      
+      if (isExpanded) {
+        contentContainer.classList.add('hidden');
+        if (toggleArrow) {
+          toggleArrow.style.transform = 'rotate(0deg)';
+          toggleArrow.classList.remove('text-purple-600', 'dark:text-purple-400');
+        }
+        return;
+      }
+      
+      const post = allPosts.find(p => p.id.toString() === id.toString());
+      if (!post) return;
+      
+      // 캐싱 체크
+      if (!post.content) {
+        contentEl.innerHTML = `<div class="py-4 text-center text-gray-400 dark:text-gray-500 animate-pulse">내용을 불러오는 중...</div>`;
+        contentContainer.classList.remove('hidden');
+        if (toggleArrow) {
+          toggleArrow.style.transform = 'rotate(90deg)';
+          toggleArrow.classList.add('text-purple-600', 'dark:text-purple-400');
+        }
+        
+        try {
+          const response = await fetch(`${API_BASE_URL}/${id}`);
+          if (!response.ok) throw new Error('상세 내용을 가져오지 못했습니다.');
+          const detail = await response.json();
+          post.content = detail.content || '내용이 없습니다.';
+        } catch (error) {
+          console.error(error);
+          contentEl.innerHTML = `<span class="text-red-500 text-sm">⚠️ 본문을 불러오는 중 오류가 발생했습니다.</span>`;
+          return;
+        }
+      }
+      
+      contentEl.innerHTML = escapeHtml(post.content);
+      contentContainer.classList.remove('hidden');
+      if (toggleArrow) {
+        toggleArrow.style.transform = 'rotate(90deg)';
+        toggleArrow.classList.add('text-purple-600', 'dark:text-purple-400');
+      }
+    }
+
+    // Article Event Listener (Event Delegation)
+    if (postsContainer) {
+      postsContainer.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        
+        // 버튼 클릭은 아코디언에서 제외
+        if (target.closest('.edit-btn') || target.closest('.delete-btn')) {
+          return;
+        }
+        
+        const article = target.closest('article');
+        if (!article) return;
+        
+        const postId = article.dataset.id;
+        if (postId) {
+          togglePostDetail(postId, article);
+        }
+      });
+      
+      // edit / delete 버튼 개별 바인딩
+      postsContainer.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const editBtn = target.closest('.edit-btn');
+        const deleteBtn = target.closest('.delete-btn');
+        const article = target.closest('article');
+        
+        if (!article) return;
+        const postId = article.dataset.id;
+        if (!postId) return;
+        
+        if (editBtn) {
+          e.stopPropagation();
+          openPasswordModal('edit', postId);
+        } else if (deleteBtn) {
+          e.stopPropagation();
+          openPasswordModal('delete', postId);
+        }
+      });
+    }
+
+    // Delete Post Action
+    async function deletePost(id, password) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ password })
+        });
+        
+        const result = await response.json();
+        
+        if (result.success) {
+          alert('게시글이 성공적으로 삭제되었습니다.');
+          loadPosts();
+        } else {
+          alert('삭제 실패: ' + (result.message || '비밀번호가 일치하지 않거나 오류가 발생했습니다.'));
+        }
+      } catch (error) {
+        console.error('Delete error:', error);
+        alert('삭제 처리 중 통신 오류가 발생했습니다.');
+      }
+    }
+
+    // Prepare Edit Post Action
+    async function prepareEditPost(id, password) {
+      try {
+        const response = await fetch(`${API_BASE_URL}/${id}`);
+        if (!response.ok) throw new Error('상세 데이터를 불러올 수 없습니다.');
+        const post = await response.json();
+        
+        editingPostId = id;
+        
+        const authorInput = document.getElementById('author') as HTMLInputElement;
+        const passwordInput = document.getElementById('password') as HTMLInputElement;
+        const titleInput = document.getElementById('title') as HTMLInputElement;
+        const contentTextarea = document.getElementById('content') as HTMLTextAreaElement;
+        
+        if (authorInput && passwordInput && titleInput && contentTextarea) {
+          authorInput.value = post.author || '';
+          passwordInput.value = password; // 패스워드 입력 자동 주입
+          titleInput.value = post.title || '';
+          contentTextarea.value = post.content || '';
+          
+          // 폼 디자인 변경
+          const writeFormHeader = writeFormContainer?.querySelector('h2');
+          if (writeFormHeader) writeFormHeader.textContent = '게시글 수정';
+          
+          const submitBtn = writeForm?.querySelector('button[type="submit"]') as HTMLButtonElement;
+          if (submitBtn) submitBtn.textContent = '수정 완료';
+          
+          if (writeFormContainer) {
+            writeFormContainer.classList.remove('hidden');
+            titleInput.focus();
+            writeFormContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        }
+      } catch (error) {
+        console.error('Prepare edit error:', error);
+        alert('글 상세 정보를 가져오는 데 실패했습니다.');
+      }
+    }
+
+    // Password Form Submit Action
+    if (passwordForm) {
+      passwordForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const passwordVal = modalPasswordInput.value;
+        if (!passwordVal) return;
+        
+        const postId = activePostId;
+        const action = activeAction;
+        
+        closePasswordModal();
+        
+        if (action === 'delete') {
+          await deletePost(postId, passwordVal);
+        } else if (action === 'edit') {
+          await prepareEditPost(postId, passwordVal);
+        }
+      });
     }
 
     // Helper: Escape HTML to prevent XSS
@@ -307,7 +603,7 @@ import DefaultLayout from '../layouts/DefaultLayout.astro'
       `;
     }
 
-    // Submit Write Form
+    // Submit Write/Edit Form
     if (writeForm) {
       writeForm.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -321,46 +617,75 @@ import DefaultLayout from '../layouts/DefaultLayout.astro'
         const originalBtnText = submitBtn.innerHTML;
         
         submitBtn.disabled = true;
-        submitBtn.textContent = '등록 중...';
+        
+        const isEditMode = editingPostId !== null;
+        submitBtn.textContent = isEditMode ? '수정 중...' : '등록 중...';
 
         try {
-          const response = await fetch(WRITE_URL, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              title: titleVal,
-              author: authorVal,
-              content: contentVal,
-              password: passwordVal
-            })
-          });
+          if (isEditMode) {
+            // PUT 요청
+            const response = await fetch(`${API_BASE_URL}/${editingPostId}`, {
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                title: titleVal,
+                author: authorVal,
+                content: contentVal,
+                password: passwordVal
+              })
+            });
 
-          if (!response.ok) throw new Error('Network response was not ok');
+            if (!response.ok) throw new Error('Network response was not ok');
 
-          const result = await response.json();
+            const result = await response.json();
 
-          if (result.status === 'success') {
-            alert('새 글 등록 성공! 글 ID: ' + result.id);
-            writeForm.reset();
-            if (writeFormContainer) writeFormContainer.classList.add('hidden');
-            // Refresh list
-            loadPosts();
+            if (result.success) {
+              alert('게시글이 성공적으로 수정되었습니다.');
+              resetWriteForm();
+              loadPosts();
+            } else {
+              alert('수정 실패: ' + (result.message || '비밀번호가 일치하지 않거나 오류가 발생했습니다.'));
+            }
           } else {
-            alert('오류 발생: ' + (result.message || '알 수 없는 오류가 발생했습니다.'));
+            // POST 요청
+            const response = await fetch(API_BASE_URL, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                title: titleVal,
+                author: authorVal,
+                content: contentVal,
+                password: passwordVal
+              })
+            });
+
+            if (!response.ok) throw new Error('Network response was not ok');
+
+            const result = await response.json();
+
+            if (result.success) {
+              alert('새 게시글이 성공적으로 등록되었습니다.');
+              resetWriteForm();
+              loadPosts();
+            } else {
+              alert('등록 실패: ' + (result.message || '오류가 발생했습니다.'));
+            }
           }
         } catch (error) {
           console.error('Submit error:', error);
-          alert('게시글 등록에 실패했습니다. 서버 설정이나 CORS 정책을 확인하세요.');
+          alert(isEditMode ? '게시글 수정에 실패했습니다. 비밀번호를 다시 확인해 주세요.' : '게시글 등록에 실패했습니다. 네트워크 설정을 확인하세요.');
         } finally {
           submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtnText;
+          submitBtn.innerHTML = isEditMode ? '수정 완료' : '등록하기';
         }
       });
     }
 
-    // Search and Filter Posts
+    // Search and Filter Posts (includes cached content match)
     if (searchInput) {
       searchInput.addEventListener('input', (e) => {
         const query = (e.target as HTMLInputElement).value.toLowerCase().trim();
@@ -368,9 +693,9 @@ import DefaultLayout from '../layouts/DefaultLayout.astro'
           filteredPosts = [...allPosts];
         } else {
           filteredPosts = allPosts.filter(post => 
-            post.title.toLowerCase().includes(query) ||
-            post.content.toLowerCase().includes(query) ||
-            post.author.toLowerCase().includes(query)
+            (post.title || '').toLowerCase().includes(query) ||
+            (post.author || '').toLowerCase().includes(query) ||
+            (post.content || '').toLowerCase().includes(query)
           );
         }
         renderPosts();
