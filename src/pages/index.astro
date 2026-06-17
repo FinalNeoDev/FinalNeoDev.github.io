@@ -73,7 +73,7 @@ import { Image } from 'astro:assets'; // astro:assets의 Image 컴포넌트를 �
           <h2 class="text-3xl font-bold mb-8 text-center">Latest Blog Posts</h2>
           
           <!-- 로딩 스켈레톤 -->
-          <div id="blog-loading" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div id="blog-loading" class="space-y-4">
             {[1, 2].map(() => (
               <div class="p-6 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl animate-pulse space-y-4 shadow-sm">
                 <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-1/4"></div>
@@ -89,13 +89,13 @@ import { Image } from 'astro:assets'; // astro:assets의 Image 컴포넌트를 �
           </div>
 
           <!-- 블로그 컨테이너 -->
-          <div id="blog-container" class="grid grid-cols-1 md:grid-cols-2 gap-6 hidden"></div>
+          <div id="blog-container" class="space-y-4 hidden"></div>
 
           <!-- 더보기 버튼 -->
           <div class="flex justify-center mt-10">
             <a 
               href="/blog" 
-              class="px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-xl shadow hover:shadow-lg transition duration-200 inline-flex items-center gap-1.5"
+              class="px-6 py-3 border border-purple-600 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 font-medium rounded-xl transition duration-200 inline-flex items-center gap-1.5"
             >
               블로그 더보기 <span class="arrow">→</span>
             </a>
@@ -367,7 +367,7 @@ import { Image } from 'astro:assets'; // astro:assets의 Image 컴포넌트를 �
               <div class="flex items-start justify-between gap-4 mb-2">
                 <div class="flex items-center gap-2.5">
                   <span class="toggle-arrow text-[10px] text-gray-400 group-hover:text-purple-600 transition-transform duration-200 inline-block">▶</span>
-                  <h3 class="text-md font-bold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition duration-150">${escapeHtml(post.title)}</h3>
+                  <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition duration-150">${escapeHtml(post.title)}</h3>
                 </div>
                 <span class="text-[10px] text-gray-400 font-mono py-0.5 px-1.5 bg-gray-50 dark:bg-gray-950 rounded border border-gray-100 dark:border-gray-900">No. ${post.id}</span>
               </div>
