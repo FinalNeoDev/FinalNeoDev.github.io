@@ -7,32 +7,59 @@ const projects = [
   {
     title: 'Korea Holidays',
     subtitle: '대한민국 공휴일 & 기념일 안내',
-    description: '대한민국의 법정 공휴일, 대체 공휴일 및 주요 기념일 정보를 한눈에 확인하고 편리하게 조회할 수 있는 웹 캘린더 서비스입니다.',
+    badge: 'Live Service',
+    badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/30',
+    icon: '📅',
     url: 'https://finalneodev.github.io/Korea_Holidays/',
-    tags: ['Web Service', 'Calendar', 'Holidays'],
-    badge: 'Live',
-    badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
-    icon: '📅'
+    summary: '대한민국의 법정 공휴일, 대체 공휴일, 24절기 및 주요 기념일 정보를 직관적인 캘린더와 목록으로 제공하는 웹 서비스입니다.',
+    features: [
+      '연도별·월별 공휴일 및 황금연휴 일정 실시간 확인',
+      '대체 공휴일 자동 적용 및 다가오는 공휴일 D-Day 계산',
+      '캘린더 뷰와 모바일 친화적인 리스트 뷰 동시 지원'
+    ],
+    useCases: [
+      '연차·휴가 계획: 징검다리 연휴와 대체공휴일을 미리 파악하여 최적의 휴가 일정 수립',
+      '업무 일정 조율: 프로젝트 릴리즈, 세무 신고, 공공기관 마감일 등 휴무 대비 일정 수립'
+    ],
+    keywords: ['대한민국공휴일', '대체공휴일', '황금연휴', '연차계획', '웹캘린더', 'D-Day', '실시간조회']
   },
   {
     title: 'Korea OT',
     subtitle: '초과 근무 및 수당 계산기',
-    description: '연장·야간·휴일 근무 시간과 통상 시급을 기반으로 복잡한 초과 수당을 빠르고 정확하게 산출해주는 실용적인 계산 도구입니다.',
+    badge: 'Utility Tool',
+    badgeColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/30',
+    icon: '⏱️',
     url: 'https://finalneodev.github.io/Korea_Holidays/overtime.html',
-    tags: ['Calculator', 'Utility', 'Productivity'],
-    badge: 'Utility',
-    badgeColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
-    icon: '⏱️'
+    summary: '연장·야간·휴일 근무 시간과 통상 임금을 바탕으로 근로기준법 규정에 부합하는 초과 수당을 빠르고 정확하게 산출해주는 실용 계산기입니다.',
+    features: [
+      '연장(1.5배), 야간(0.5배 가산), 휴일(1.5~2배) 수당 자동 분할 산출',
+      '시급 및 월 통상임금 기준 상호 환산 지원',
+      '근무 시간 입력 즉시 총 예상 수당과 항목별 상세 내역 표기'
+    ],
+    useCases: [
+      '급여 명세서 검증: 월말 급여 수령 전 실제 근무에 따른 초과 수당 사전 대조',
+      '야간·주말 단기 근무: 추가 투입 근무에 대한 정당한 예상 보수를 사전에 투명하게 확인'
+    ],
+    keywords: ['초과근무수당', '야간수당', '휴일수당', '근로기준법', '통상임금', '급여계산기', '임금계산']
   },
   {
     title: 'Korea Font',
     subtitle: 'KERIS 안심 글꼴 뷰어',
-    description: '한국교육학술정보원(KERIS)의 오픈 폰트 라이선스(OFL) 안심 글꼴 정보를 제공하고 실시간 타이핑 미리보기를 지원합니다.',
-    url: 'https://finalneodev.github.io/KERIS_OFL_fonts/',
-    tags: ['Typography', 'Font Viewer', 'OFL'],
     badge: 'Open Source',
-    badgeColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
-    icon: '🔤'
+    badgeColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/30',
+    icon: '🔤',
+    url: 'https://finalneodev.github.io/KERIS_OFL_fonts/',
+    summary: '한국교육학술정보원(KERIS)의 오픈 폰트 라이선스(OFL) 안심 글꼴 정보를 제공하고 실시간 타이핑 미리보기를 지원하는 플랫폼입니다.',
+    features: [
+      '저작권 분쟁 걱정 없이 상업적 이용이 가능한 안심 글꼴 큐레이션',
+      '원하는 문구를 직접 입력하여 다양한 폰트체를 한 화면에서 실시간 비교',
+      '글꼴별 라이선스 허용 범위 안내 및 공식 다운로드 연계'
+    ],
+    useCases: [
+      '유튜브·콘텐츠 제작: 썸네일, 자막, 카드뉴스 제작 시 저작권 안전한 감성 폰트 발굴',
+      '문서 및 발표자료 디자인: 보고서, PPT, 인쇄물에 가독성과 심미성을 더해줄 폰트 탐색'
+    ],
+    keywords: ['KERIS안심글꼴', 'OFL', '상업용무료폰트', '타이포그래피', '실시간미리보기', '폰트비교', '저작권안심']
   }
 ]
 ---
@@ -60,7 +87,7 @@ const projects = [
           <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
             <span class="text-gradient">FinalNeoDev</span>
           </h1>
-          <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 font-medium max-w-xl mb-3">
+          <p class="text-lg md:text-xl text-gray-700 dark:text-gray-200 font-medium max-w-xl mb-3">
             아이디어와 기술을 잇는 웹 서비스를 연구하고 개발합니다.
           </p>
           <p class="text-sm md:text-base text-gray-500 dark:text-gray-400 max-w-md mb-8">
@@ -71,16 +98,16 @@ const projects = [
           <div class="flex flex-wrap items-center justify-center md:justify-start gap-4">
             <a
               href="#portfolio"
-              class="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg shadow-purple-600/25 hover:shadow-purple-600/40 transition-all duration-200 inline-flex items-center gap-2 transform hover:-translate-y-0.5"
+              class="btn-hero-primary px-7 py-3.5 rounded-xl font-bold shadow-lg shadow-purple-600/30 hover:shadow-purple-600/50 transition-all duration-200 inline-flex items-center gap-2 transform hover:-translate-y-0.5"
             >
-              <span>포트폴리오 보기</span>
-              <span class="text-lg">↓</span>
+              <span class="text-white">포트폴리오 보기</span>
+              <span class="text-white text-lg">↓</span>
             </a>
             <a
               href="https://github.com/FinalNeoDev"
               target="_blank"
               rel="noopener noreferrer"
-              class="px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 bg-white/70 dark:bg-gray-800/70 text-gray-800 dark:text-gray-200 font-semibold backdrop-blur-sm shadow-sm hover:shadow transition-all duration-200 inline-flex items-center gap-2 transform hover:-translate-y-0.5"
+              class="btn-hero-secondary px-7 py-3.5 rounded-xl border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 bg-white/80 dark:bg-gray-800/80 text-gray-800 dark:text-gray-200 font-semibold backdrop-blur-sm shadow-sm hover:shadow transition-all duration-200 inline-flex items-center gap-2 transform hover:-translate-y-0.5"
             >
               <span>GitHub 방문</span>
               <span class="text-base">↗</span>
@@ -93,67 +120,115 @@ const projects = [
 
   <!-- Portfolio Section -->
   <section id="portfolio" class="py-20 bg-gray-50/70 dark:bg-gray-950/40 border-t border-gray-200/80 dark:border-gray-800/80 transition-colors scroll-mt-12">
-    <div class="container">
-      <div class="text-center max-w-2xl mx-auto mb-14">
+    <div class="container max-w-6xl">
+      <div class="text-center max-w-2xl mx-auto mb-16">
         <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">
           Featured <span class="text-gradient">Portfolio</span>
         </h2>
         <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base">
-          현재 서비스 중인 주요 웹 프로젝트들을 확인해보세요.
+          직접 기획·개발하여 운영 중인 주요 웹 서비스와 유틸리티 프로젝트입니다.
         </p>
       </div>
 
-      <!-- Project Cards Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+      <!-- Horizontal Wide Project Cards List -->
+      <div class="flex flex-col gap-10">
         {projects.map((project) => (
-          <div class="group relative flex flex-col justify-between p-7 bg-white dark:bg-gray-900 border border-gray-200/90 dark:border-gray-800/90 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/50 dark:hover:border-purple-500/50">
-            <div>
-              <!-- Card Header -->
-              <div class="flex items-center justify-between gap-3 mb-4">
-                <div class="text-3xl p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/80 border border-gray-200/50 dark:border-gray-700/50 shadow-inner">
-                  {project.icon}
+          <article class="group relative bg-white dark:bg-gray-900 border border-gray-200/90 dark:border-gray-800/90 rounded-3xl p-6 md:p-8 shadow-sm hover:shadow-2xl transition-all duration-300 hover:border-purple-500/50 dark:hover:border-purple-500/50">
+            <div class="flex flex-col lg:flex-row gap-8 lg:gap-10">
+              
+              <!-- Left Column: Basic Info & Launch Action -->
+              <div class="lg:w-5/12 flex flex-col justify-between shrink-0">
+                <div>
+                  <div class="flex items-center justify-between gap-3 mb-4">
+                    <div class="text-3xl p-3 rounded-2xl bg-purple-50 dark:bg-purple-950/40 border border-purple-100 dark:border-purple-900/50 shadow-inner">
+                      {project.icon}
+                    </div>
+                    <span class={`text-xs font-semibold px-3 py-1 rounded-full border ${project.badgeColor}`}>
+                      {project.badge}
+                    </span>
+                  </div>
+
+                  <h3 class="text-2xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors mb-1">
+                    {project.title}
+                  </h3>
+                  <p class="text-sm font-semibold text-purple-600 dark:text-purple-400 mb-4">
+                    {project.subtitle}
+                  </p>
+
+                  <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
+                    {project.summary}
+                  </p>
                 </div>
-                <span class={`text-xs font-semibold px-2.5 py-1 rounded-full border ${project.badgeColor}`}>
-                  {project.badge}
-                </span>
+
+                <div class="pt-2">
+                  <a
+                    href={project.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="btn-card-action w-full py-3.5 px-6 rounded-xl font-bold text-sm text-center inline-flex items-center justify-center gap-2 shadow-md shadow-purple-600/20 hover:shadow-purple-600/35 transition-all duration-200 transform hover:-translate-y-0.5"
+                  >
+                    <span class="text-white">서비스 바로가기</span>
+                    <span class="text-white transition-transform duration-200 group-hover:translate-x-1">→</span>
+                  </a>
+                </div>
               </div>
 
-              <!-- Project Title & Subtitle -->
-              <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
-                {project.title}
-              </h3>
-              <p class="text-xs font-medium text-purple-600/90 dark:text-purple-400/90 mb-3">
-                {project.subtitle}
-              </p>
+              <!-- Right Column: Features, Use Cases & Hashtag Keywords -->
+              <div class="lg:w-7/12 flex flex-col justify-between border-t lg:border-t-0 lg:border-l border-gray-100 dark:border-gray-800/80 pt-6 lg:pt-0 lg:pl-10">
+                <div class="space-y-5">
+                  <!-- Key Features -->
+                  <div>
+                    <h4 class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-2.5">
+                      Key Features
+                    </h4>
+                    <ul class="space-y-1.5">
+                      {project.features.map((feat) => (
+                        <li class="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300 leading-snug">
+                          <span class="text-purple-600 dark:text-purple-400 mt-0.5 shrink-0 font-bold">✓</span>
+                          <span>{feat}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
 
-              <!-- Description -->
-              <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
-                {project.description}
-              </p>
-            </div>
+                  <!-- Use Cases -->
+                  <div class="p-4 rounded-2xl bg-purple-50/60 dark:bg-purple-950/25 border border-purple-100 dark:border-purple-900/40">
+                    <h4 class="text-xs font-bold text-purple-700 dark:text-purple-300 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                      <span>💡</span>
+                      <span>추가 활용 예시 (Use Cases)</span>
+                    </h4>
+                    <ul class="space-y-2 text-xs md:text-sm text-gray-700 dark:text-gray-300">
+                      {project.useCases.map((useCase) => (
+                        <li class="flex items-start gap-2 leading-relaxed">
+                          <span class="text-purple-500 shrink-0">•</span>
+                          <span>{useCase}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
 
-            <div>
-              <!-- Tags -->
-              <div class="flex flex-wrap gap-1.5 mb-6">
-                {project.tags.map((tag) => (
-                  <span class="text-[11px] font-mono px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200/60 dark:border-gray-700/60">
-                    #{tag}
-                  </span>
-                ))}
+                <!-- Hashtag Keywords -->
+                <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-800/80">
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">
+                      Keywords
+                    </span>
+                  </div>
+                  <div class="flex flex-wrap gap-2">
+                    {project.keywords.map((kw) => (
+                      <span class="inline-flex items-center text-xs font-medium px-2.5 py-1 rounded-lg bg-gray-100 dark:bg-gray-800/90 text-purple-700 dark:text-purple-300 border border-gray-200 dark:border-gray-700/60 hover:bg-purple-50 dark:hover:bg-purple-950/40 transition-colors">
+                        <span class="text-purple-400 dark:text-purple-500 font-bold mr-0.5">#</span>
+                        <span>{kw}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
               </div>
 
-              <!-- Action Link -->
-              <a
-                href={project.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="w-full py-2.5 px-4 rounded-xl font-medium text-sm text-center inline-flex items-center justify-center gap-1.5 bg-purple-50 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 dark:hover:text-white border border-purple-200 dark:border-purple-800/60 transition-all duration-200"
-              >
-                <span>서비스 바로가기</span>
-                <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
-              </a>
             </div>
-          </div>
+          </article>
         ))}
       </div>
     </div>
@@ -180,5 +255,40 @@ const projects = [
 
   html {
     scroll-behavior: smooth;
+  }
+
+  /* 강제 흰색 글자 및 밑줄 제거 보장 (main a 전역 스타일 덮어쓰기) */
+  .btn-hero-primary {
+    background-color: #9333ea !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+  }
+
+  .btn-hero-primary span {
+    color: #ffffff !important;
+  }
+
+  .btn-hero-primary:hover {
+    background-color: #7e22ce !important;
+    color: #ffffff !important;
+  }
+
+  .btn-hero-secondary {
+    text-decoration: none !important;
+  }
+
+  .btn-card-action {
+    background-color: #9333ea !important;
+    color: #ffffff !important;
+    text-decoration: none !important;
+  }
+
+  .btn-card-action span {
+    color: #ffffff !important;
+  }
+
+  .btn-card-action:hover {
+    background-color: #7e22ce !important;
+    color: #ffffff !important;
   }
 </style>
