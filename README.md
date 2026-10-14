@@ -1,4 +1,4 @@
-# 🚀 FinalNeoDev
+# 🚀 FinalNeo
 > **개발 · 테스트 · 서비스**의 모든 과정을 도전하고 기록하는 공간입니다.
 
 [![Website](https://img.shields.io/badge/Website-finalneodev.github.io-blue?style=flat-square&logo=github)](https://finalneodev.github.io)

@@ -2,14 +2,14 @@ import { defineThemeConfig } from '@utils/defineThemeConfig'
 import profileFalcon from '@assets/profile_falcon.png'
 
 export default defineThemeConfig({
-  name: 'FinalNeoDev',
+  name: 'FinalNeo',
   id: 'accessible-astro-starter',
   logo: profileFalcon,
   seo: {
-    title: 'FinalNeoDev',
+    title: 'FinalNeo',
     description:
       '개발, 테스트, 서비스의 모든 과정을 기록하는 공간',
-    author: 'FinalNeoDev',
+    author: 'FinalNeo',
     image: profileFalcon, // Can also be a string e.g. '/social-preview-image.png',
   },
   colors: {
