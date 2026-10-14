@@ -41,11 +41,11 @@ const projects = [
   <!-- Hero Section -->
   <section class="relative pt-16 pb-20 md:pt-24 md:pb-28 overflow-hidden">
     <div class="container relative z-10">
-      <div class="flex flex-col items-center justify-center text-center max-w-3xl mx-auto">
-        <!-- Profile Falcon Image with Glow -->
-        <div class="relative group mb-8">
+      <div class="flex flex-col md:flex-row items-center justify-center gap-10 md:gap-16 max-w-5xl mx-auto">
+        <!-- Left: Profile Falcon Image with Glow -->
+        <div class="relative group shrink-0">
           <div class="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-600 to-teal-400 opacity-60 blur-lg group-hover:opacity-100 transition duration-500 group-hover:scale-105"></div>
-          <div class="relative w-44 h-44 md:w-52 md:h-52 rounded-full overflow-hidden border-4 border-white dark:border-gray-900 shadow-2xl transition duration-300 group-hover:scale-[1.02]">
+          <div class="relative w-48 h-48 md:w-60 md:h-60 rounded-full overflow-hidden border-4 border-white dark:border-gray-900 shadow-2xl transition duration-300 group-hover:scale-[1.02]">
             <Image
               src={profileFalcon}
               alt="FinalNeoDev Profile Falcon"
@@ -55,35 +55,37 @@ const projects = [
           </div>
         </div>
 
-        <!-- Title & Subtitle -->
-        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
-          <span class="text-gradient">FinalNeoDev</span>
-        </h1>
-        <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 font-medium max-w-xl mb-3">
-          아이디어와 기술을 잇는 웹 서비스를 연구하고 개발합니다.
-        </p>
-        <p class="text-sm md:text-base text-gray-500 dark:text-gray-400 max-w-md mb-8">
-          실생활에 도움이 되는 편리하고 직관적인 웹 도구를 만듭니다.
-        </p>
+        <!-- Right: Title, Subtitle & Action Buttons -->
+        <div class="flex flex-col items-center md:items-start text-center md:text-left">
+          <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
+            <span class="text-gradient">FinalNeoDev</span>
+          </h1>
+          <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 font-medium max-w-xl mb-3">
+            아이디어와 기술을 잇는 웹 서비스를 연구하고 개발합니다.
+          </p>
+          <p class="text-sm md:text-base text-gray-500 dark:text-gray-400 max-w-md mb-8">
+            실생활에 도움이 되는 편리하고 직관적인 웹 도구를 만듭니다.
+          </p>
 
-        <!-- Action Buttons -->
-        <div class="flex flex-wrap items-center justify-center gap-4">
-          <a
-            href="#portfolio"
-            class="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg shadow-purple-600/25 hover:shadow-purple-600/40 transition-all duration-200 inline-flex items-center gap-2 transform hover:-translate-y-0.5"
-          >
-            <span>포트폴리오 보기</span>
-            <span class="text-lg">↓</span>
-          </a>
-          <a
-            href="https://github.com/FinalNeoDev"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 bg-white/70 dark:bg-gray-800/70 text-gray-800 dark:text-gray-200 font-semibold backdrop-blur-sm shadow-sm hover:shadow transition-all duration-200 inline-flex items-center gap-2 transform hover:-translate-y-0.5"
-          >
-            <span>GitHub 방문</span>
-            <span class="text-base">↗</span>
-          </a>
+          <!-- Action Buttons -->
+          <div class="flex flex-wrap items-center justify-center md:justify-start gap-4">
+            <a
+              href="#portfolio"
+              class="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg shadow-purple-600/25 hover:shadow-purple-600/40 transition-all duration-200 inline-flex items-center gap-2 transform hover:-translate-y-0.5"
+            >
+              <span>포트폴리오 보기</span>
+              <span class="text-lg">↓</span>
+            </a>
+            <a
+              href="https://github.com/FinalNeoDev"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 bg-white/70 dark:bg-gray-800/70 text-gray-800 dark:text-gray-200 font-semibold backdrop-blur-sm shadow-sm hover:shadow transition-all duration-200 inline-flex items-center gap-2 transform hover:-translate-y-0.5"
+            >
+              <span>GitHub 방문</span>
+              <span class="text-base">↗</span>
+            </a>
+          </div>
         </div>
       </div>
     </div>
