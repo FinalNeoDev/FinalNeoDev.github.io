@@ -1,105 +1,33 @@
 ---
-import CallToAction from './CallToAction.astro'
-import Logo from './Logo.astro'
-import { Heading, Link } from 'accessible-astro-components'
+import { Image } from 'astro:assets'
+import profileFalcon from '@assets/profile_falcon.png'
 
-/**
- * Footer Component
- *
- * @description A component that displays the footer of the website
- */
 const currentYear = new Date().getFullYear()
 ---
 
-<footer>
-  <CallToAction />
-  <section class="py-20">
-    <Heading level="h2" class="sr-only">Footer</Heading>
-    <div class="container grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-      <div class="flex flex-col gap-4">
-        <Heading level="h3" size="h6">Features</Heading>
-        <ul class="flex flex-col gap-2">
-          <li><Link href="/accessibility-statement">Accessibility statement</Link></li>
-          <li><Link href="/accessible-components">Accessible components</Link></li>
-          <li><Link href="/color-contrast-checker">Color contrast checker</Link></li>
-          <li><Link href="/markdown-page">Markdown page</Link></li>
-          <li><Link href="/mdx-page">MDX page</Link></li>
-          <li><Link href="/404-page">404 page</Link></li>
-          <li><Link href="/sitemap">Sitemap</Link></li>
-        </ul>
+<footer class="border-t border-gray-200 dark:border-gray-800 bg-gray-50/50 dark:bg-gray-900/50 mt-auto transition-colors">
+  <div class="container py-12">
+    <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full overflow-hidden border-2 border-purple-500 shadow-sm shrink-0">
+          <Image src={profileFalcon} alt="FinalNeoDev" class="object-cover w-full h-full" />
+        </div>
+        <div>
+          <span class="font-bold text-lg text-gray-900 dark:text-gray-100">FinalNeoDev</span>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Personal Dev & Service Showcase</p>
+        </div>
       </div>
-      <div class="flex flex-col gap-4">
-        <Heading level="h3" size="h6">Incluud projects</Heading>
-        <ul class="flex flex-col gap-2">
-          <li>
-            <Link isExternal href="https://accessible-astro-starter.incluud.dev">Accessible Astro Starter</Link>
-          </li>
-          <li>
-            <Link isExternal href="https://accessible-astro-dashboard.incluud.dev">Accessible Astro Dashboard</Link>
-          </li>
-          <li>
-            <Link isExternal href="https://accessible-astro-starter.incluud.dev/accessible-components"
-              >Accessible Astro Components</Link
-            >
-          </li>
-          <li>
-            <Link isExternal href="https://accessible-astro-docs.incluud.dev">Accessible Astro Docs</Link>
-          </li>
-          <li>
-            <Link isExternal href="https://color-contrast.incluud.dev">Color Contrast Checker</Link>
-          </li>
-        </ul>
-      </div>
-      <div class="flex flex-col gap-4">
-        <Heading level="h3" size="h6">Developer tools</Heading>
-        <ul class="flex flex-col gap-2">
-          <li>
-            <Link isExternal href="https://chrispederick.com/work/web-developer/">Web Developer Extension</Link>
-          </li>
-          <li>
-            <Link isExternal href="https://accessibilityinsights.io/">Accessibility Insights</Link>
-          </li>
-          <li>
-            <Link isExternal href="https://www.deque.com/axe/devtools/">axe DevTools</Link>
-          </li>
-          <li>
-            <Link isExternal href="https://wave.webaim.org/extension/">WAVE Web Accessibility</Link>
-          </li>
-          <li>
-            <Link isExternal href="https://www.w3.org/WAI/ARIA/apg/patterns/">ARIA Design Patterns</Link>
-          </li>
-          <li>
-            <Link isExternal href="https://aaardvarkaccessibility.com/wcag-plain-english/">WCAG Plain English</Link>
-          </li>
-        </ul>
-      </div>
-      <div class="flex flex-col gap-4">
-        <Logo loading="lazy" />
-        <p class="leading-[1.75]">
-          Tip: always test for screen reader support. Press <kbd class="kbd">⌘</kbd> + <kbd class="kbd">F5</kbd> to start
-          VoiceOver or <kbd class="kbd">Win</kbd>
-          + <kbd class="kbd">Ctrl</kbd> + <kbd class="kbd">Enter</kbd> for Narrator.
-        </p>
-        <p>Cute astronaut image by <Link href="https://unsplash.com/@kobbymendez">Kobby Mendez</Link> on Unsplash.</p>
-      </div>
-    </div>
-  </section>
-  <section class="py-8">
-    <div class="container flex flex-col gap-4 md:flex-row md:justify-between">
-      <p>
-        &copy; {currentYear} - Starter Theme for <Link href="https://astro.build/">Astro</Link>.
-      </p>
-      <p>
-        Made with ❤️ by <Link href="https://github.com/markteekman">Mark Teekman</Link>. Part of <Link
-          href="https://www.incluud.dev">Incluud</Link
-        >.
-      </p>
-    </div>
-  </section>
-</footer>
 
-<style>
-  section {
-    border-top: 1px solid var(--border-color-subtle);
-  }
-</style>
+      <div class="flex flex-wrap items-center justify-center gap-6 text-sm text-gray-600 dark:text-gray-400">
+        <a href="/" class="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Home</a>
+        <a href="/#portfolio" class="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Portfolio</a>
+        <a href="https://github.com/FinalNeoDev" target="_blank" rel="noopener noreferrer" class="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">GitHub</a>
+        <a href="https://finalneodev.github.io/privacy-policy/" target="_blank" rel="noopener noreferrer" class="hover:text-purple-600 dark:hover:text-purple-400 transition-colors">Privacy Policy</a>
+      </div>
+    </div>
+
+    <div class="mt-8 pt-6 border-t border-gray-200/60 dark:border-gray-800/60 text-center text-xs text-gray-400">
+      <p>&copy; {currentYear} FinalNeoDev. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

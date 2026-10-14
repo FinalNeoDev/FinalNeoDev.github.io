@@ -1,271 +1,182 @@
 ---
-import DefaultLayout from '../layouts/DefaultLayout.astro';
-import { Card } from 'accessible-astro-components';
-import { Icon } from 'astro-icon/components';
-// src/assets/profile_falcon.png 이미지를 import합니다.
-import profileFalcon from '../assets/profile_falcon.png';
-import { Image } from 'astro:assets'; // astro:assets의 Image 컴포넌트를 사용합니다.
+import DefaultLayout from '../layouts/DefaultLayout.astro'
+import profileFalcon from '../assets/profile_falcon.png'
+import { Image } from 'astro:assets'
+
+const projects = [
+  {
+    title: 'Korea Holidays',
+    subtitle: '대한민국 공휴일 & 기념일 안내',
+    description: '대한민국의 법정 공휴일, 대체 공휴일 및 주요 기념일 정보를 한눈에 확인하고 편리하게 조회할 수 있는 웹 캘린더 서비스입니다.',
+    url: 'https://finalneodev.github.io/Korea_Holidays/',
+    tags: ['Web Service', 'Calendar', 'Holidays'],
+    badge: 'Live',
+    badgeColor: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border-emerald-500/20',
+    icon: '📅'
+  },
+  {
+    title: 'Korea OT',
+    subtitle: '초과 근무 및 수당 계산기',
+    description: '연장·야간·휴일 근무 시간과 통상 시급을 기반으로 복잡한 초과 수당을 빠르고 정확하게 산출해주는 실용적인 계산 도구입니다.',
+    url: 'https://finalneodev.github.io/Korea_Holidays/overtime.html',
+    tags: ['Calculator', 'Utility', 'Productivity'],
+    badge: 'Utility',
+    badgeColor: 'bg-blue-500/10 text-blue-600 dark:text-blue-400 border-blue-500/20',
+    icon: '⏱️'
+  },
+  {
+    title: 'Korea Font',
+    subtitle: 'KERIS 안심 글꼴 뷰어',
+    description: '한국교육학술정보원(KERIS)의 오픈 폰트 라이선스(OFL) 안심 글꼴 정보를 제공하고 실시간 타이핑 미리보기를 지원합니다.',
+    url: 'https://finalneodev.github.io/KERIS_OFL_fonts/',
+    tags: ['Typography', 'Font Viewer', 'OFL'],
+    badge: 'Open Source',
+    badgeColor: 'bg-purple-500/10 text-purple-600 dark:text-purple-400 border-purple-500/20',
+    icon: '🔤'
+  }
+]
 ---
 
-<DefaultLayout title="개발 중 - FinalNeoDev" hideFooter={true}>
-  <section class="my-32">
-    <div class="container">
-      <div class="flex flex-col items-center justify-center text-center gap-8">
-        <div class="w-64 h-64 md:w-80 md:h-80 rounded-full overflow-hidden shadow-xl mb-6 border-4 border-white dark:border-gray-800">
-          <Image src={profileFalcon} alt="A watercolor portrait of a peregrine falcon, representing FinalNeoDev" class="object-cover w-full h-full" />
+<DefaultLayout title="FinalNeoDev - Portfolio & Projects" hideFooter={false}>
+  <!-- Hero Section -->
+  <section class="relative pt-16 pb-20 md:pt-24 md:pb-28 overflow-hidden">
+    <div class="container relative z-10">
+      <div class="flex flex-col items-center justify-center text-center max-w-3xl mx-auto">
+        <!-- Profile Falcon Image with Glow -->
+        <div class="relative group mb-8">
+          <div class="absolute -inset-1 rounded-full bg-gradient-to-r from-purple-600 to-teal-400 opacity-60 blur-lg group-hover:opacity-100 transition duration-500 group-hover:scale-105"></div>
+          <div class="relative w-44 h-44 md:w-52 md:h-52 rounded-full overflow-hidden border-4 border-white dark:border-gray-900 shadow-2xl transition duration-300 group-hover:scale-[1.02]">
+            <Image
+              src={profileFalcon}
+              alt="FinalNeoDev Profile Falcon"
+              class="object-cover w-full h-full"
+              priority
+            />
+          </div>
         </div>
-        
-        <h1 class="text-4xl font-bold md:text-6xl tracking-tight">
-          FinalNeoDev <span class="text-gradient">개발 중</span>
+
+        <!-- Title & Subtitle -->
+        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-4">
+          <span class="text-gradient">FinalNeoDev</span>
         </h1>
-        
-        <p class="text-xl text-gray-6xl max-w-md my-4">
-          개발, 테스트, 서비스의 모든 과정을 체계적으로 기록하기 위해 이 공간을 열심히 개발하고 있습니다. 곧 멋진 모습으로 찾아뵙겠습니다!
+        <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300 font-medium max-w-xl mb-3">
+          아이디어와 기술을 잇는 웹 서비스를 연구하고 개발합니다.
+        </p>
+        <p class="text-sm md:text-base text-gray-500 dark:text-gray-400 max-w-md mb-8">
+          실생활에 도움이 되는 편리하고 직관적인 웹 도구를 만듭니다.
         </p>
 
-        <div class="w-full max-w-md text-left mt-6">
-          <Card
-            url="https://github.com/finalneodev"
-            title="GitHub 저장소 방문하기 🚀"
-            class="no-image"
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-4">
+          <a
+            href="#portfolio"
+            class="px-6 py-3 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-semibold shadow-lg shadow-purple-600/25 hover:shadow-purple-600/40 transition-all duration-200 inline-flex items-center gap-2 transform hover:-translate-y-0.5"
           >
-            <p class="text-gray-600 dark:text-gray-400">
-              대신 깃허브에서 진행 중인 프로젝트와 README를 먼저 확인하실 수 있습니다.
-            </p>
-          </Card>
+            <span>포트폴리오 보기</span>
+            <span class="text-lg">↓</span>
+          </a>
+          <a
+            href="https://github.com/FinalNeoDev"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="px-6 py-3 rounded-xl border border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-600 bg-white/70 dark:bg-gray-800/70 text-gray-800 dark:text-gray-200 font-semibold backdrop-blur-sm shadow-sm hover:shadow transition-all duration-200 inline-flex items-center gap-2 transform hover:-translate-y-0.5"
+          >
+            <span>GitHub 방문</span>
+            <span class="text-base">↗</span>
+          </a>
         </div>
-        
-        <div class="w-full max-w-4xl text-left mt-16 pb-16 border-b border-gray-100 dark:border-gray-800">
-          <h2 class="text-3xl font-bold mb-8 text-center" id="portfolio">Portfolio</h2>
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card
-              url="https://finalneodev.github.io/Korea_Holidays/"
-              title="Korea Holidays"
-              class="no-image"
-            >
-              <p class="text-gray-600 dark:text-gray-400">
-                한국의 공휴일 및 기념일 정보를 제공하는 웹 서비스입니다.
-              </p>
-            </Card>
-            <Card
-              url="https://finalneodev.github.io/Korea_Holidays/overtime.html"
-              title="Korea OT"
-              class="no-image"
-            >
-              <p class="text-gray-600 dark:text-gray-400">
-                초과 근무 및 수당 계산 기능을 제공하는 페이지입니다.
-              </p>
-            </Card>
-            <Card
-              url="https://finalneodev.github.io/KERIS_OFL_fonts/"
-              title="Korea Font"
-              class="no-image"
-            >
-              <p class="text-gray-600 dark:text-gray-400">
-                KERIS 안심 글꼴(OFL) 정보를 제공하고 미리보기 기능을 지원합니다.
-              </p>
-            </Card>
-          </div>
-        </div>
+      </div>
+    </div>
+  </section>
 
-        <!-- Recent Board Messages Section -->
-        <div class="w-full max-w-4xl text-left mt-16">
-          <h2 class="text-3xl font-bold mb-8 text-center">Recent Board Messages</h2>
+  <!-- Portfolio Section -->
+  <section id="portfolio" class="py-20 bg-gray-50/70 dark:bg-gray-950/40 border-t border-gray-200/80 dark:border-gray-800/80 transition-colors scroll-mt-12">
+    <div class="container">
+      <div class="text-center max-w-2xl mx-auto mb-14">
+        <h2 class="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+          Featured <span class="text-gradient">Portfolio</span>
+        </h2>
+        <p class="text-gray-600 dark:text-gray-400 text-sm md:text-base">
+          현재 서비스 중인 주요 웹 프로젝트들을 확인해보세요.
+        </p>
+      </div>
 
-          <!-- 로딩 스켈레톤 -->
-          <div id="board-loading" class="space-y-4">
-            {[1, 2].map(() => (
-              <div class="p-6 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl animate-pulse space-y-4 shadow-sm">
-                <div class="h-6 bg-gray-200 dark:bg-gray-800 rounded w-1/3"></div>
-                <div class="h-4 bg-gray-200 dark:bg-gray-800 rounded w-16"></div>
+      <!-- Project Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        {projects.map((project) => (
+          <div class="group relative flex flex-col justify-between p-7 bg-white dark:bg-gray-900 border border-gray-200/90 dark:border-gray-800/90 rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/50 dark:hover:border-purple-500/50">
+            <div>
+              <!-- Card Header -->
+              <div class="flex items-center justify-between gap-3 mb-4">
+                <div class="text-3xl p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800/80 border border-gray-200/50 dark:border-gray-700/50 shadow-inner">
+                  {project.icon}
+                </div>
+                <span class={`text-xs font-semibold px-2.5 py-1 rounded-full border ${project.badgeColor}`}>
+                  {project.badge}
+                </span>
               </div>
-            ))}
+
+              <!-- Project Title & Subtitle -->
+              <h3 class="text-xl font-bold text-gray-900 dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors">
+                {project.title}
+              </h3>
+              <p class="text-xs font-medium text-purple-600/90 dark:text-purple-400/90 mb-3">
+                {project.subtitle}
+              </p>
+
+              <!-- Description -->
+              <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed mb-6">
+                {project.description}
+              </p>
+            </div>
+
+            <div>
+              <!-- Tags -->
+              <div class="flex flex-wrap gap-1.5 mb-6">
+                {project.tags.map((tag) => (
+                  <span class="text-[11px] font-mono px-2 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 border border-gray-200/60 dark:border-gray-700/60">
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+
+              <!-- Action Link -->
+              <a
+                href={project.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="w-full py-2.5 px-4 rounded-xl font-medium text-sm text-center inline-flex items-center justify-center gap-1.5 bg-purple-50 dark:bg-purple-950/30 text-purple-700 dark:text-purple-300 hover:bg-purple-600 hover:text-white dark:hover:bg-purple-600 dark:hover:text-white border border-purple-200 dark:border-purple-800/60 transition-all duration-200"
+              >
+                <span>서비스 바로가기</span>
+                <span class="transition-transform duration-200 group-hover:translate-x-1">→</span>
+              </a>
+            </div>
           </div>
-
-          <!-- 빈 상태 -->
-          <div id="board-empty" class="hidden text-center py-12 bg-gray-50 dark:bg-gray-900/50 rounded-2xl border border-dashed border-gray-200 dark:border-gray-800">
-            <p class="text-gray-500 dark:text-gray-400">등록된 게시글이 없습니다.</p>
-          </div>
-
-          <!-- 게시글 컨테이너 -->
-          <div id="board-container" class="space-y-4 hidden"></div>
-
-          <!-- 더보기 버튼 -->
-          <div class="flex justify-center mt-10">
-            <a 
-              href="/board" 
-              class="px-6 py-3 border border-purple-600 text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/20 font-medium rounded-xl transition duration-200 inline-flex items-center gap-1.5"
-            >
-              게시판 더보기 <span class="arrow">→</span>
-            </a>
-          </div>
-        </div>
-
+        ))}
       </div>
     </div>
   </section>
 </DefaultLayout>
 
-<script>
-  document.addEventListener('astro:page-load', () => {
-    // API URL
-    const BOARD_API_URL = 'https://fnnas.synology.me:22103/node/api/posts';
-
-    // State
-    let boardPosts = [];
-
-    // DOM Elements - Board
-    const boardContainer = document.getElementById('board-container');
-    const boardLoading = document.getElementById('board-loading');
-    const boardEmpty = document.getElementById('board-empty');
-
-    // Format Date Helper
-    const formatDate = (dateString) => {
-      if (!dateString) return '';
-      try {
-        const date = new Date(dateString);
-        if (isNaN(date.getTime())) return dateString;
-        return date.toLocaleDateString('ko-KR', {
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric'
-        });
-      } catch (e) {
-        return dateString;
-      }
-    };
-
-    // Helper: Escape HTML
-    function escapeHtml(text) {
-      if (!text) return '';
-      const map = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#039;'
-      };
-      return text.replace(/[&<>"']/g, function(m) { return map[m]; });
-    }
-
-    // Toggle Board Detail (Accordion)
-    async function toggleBoardDetail(id, articleEl) {
-      const contentContainer = articleEl.querySelector('.post-content-container');
-      const contentEl = articleEl.querySelector('.post-content-text');
-      const toggleArrow = articleEl.querySelector('.toggle-arrow');
-      if (!contentContainer || !contentEl) return;
-
-      const isExpanded = !contentContainer.classList.contains('hidden');
-      if (isExpanded) {
-        contentContainer.classList.add('hidden');
-        if (toggleArrow) {
-          toggleArrow.style.transform = 'rotate(0deg)';
-          toggleArrow.classList.remove('text-purple-600', 'dark:text-purple-400');
-        }
-        return;
-      }
-
-      const post = boardPosts.find(p => p.id.toString() === id.toString());
-      if (!post) return;
-
-      if (!post.content) {
-        contentEl.innerHTML = `<div class="py-3 text-center text-gray-400 animate-pulse text-sm">본문을 불러오는 중...</div>`;
-        contentContainer.classList.remove('hidden');
-        if (toggleArrow) {
-          toggleArrow.style.transform = 'rotate(90deg)';
-          toggleArrow.classList.add('text-purple-600', 'dark:text-purple-400');
-        }
-
-        try {
-          const response = await fetch(`${BOARD_API_URL}/${id}`);
-          if (!response.ok) throw new Error();
-          const detail = await response.json();
-          post.content = detail.content || '내용이 없습니다.';
-        } catch {
-          contentEl.innerHTML = `<span class="text-red-500 text-sm">⚠️ 본문을 가져오지 못했습니다.</span>`;
-          return;
-        }
-      }
-
-      contentEl.innerHTML = escapeHtml(post.content);
-      contentContainer.classList.remove('hidden');
-      if (toggleArrow) {
-        toggleArrow.style.transform = 'rotate(90deg)';
-        toggleArrow.classList.add('text-purple-600', 'dark:text-purple-400');
-      }
-    }
-
-    // Fetch and Load Board (Max 7)
-    async function loadBoard() {
-      if (!boardContainer || !boardLoading || !boardEmpty) return;
-      try {
-        const response = await fetch(BOARD_API_URL);
-        if (!response.ok) throw new Error();
-        const result = await response.json();
-        
-        if (Array.isArray(result) && result.length > 0) {
-          boardPosts = result.sort((a, b) => parseInt(b.id) - parseInt(a.id));
-          const displayPosts = boardPosts.slice(0, 7); // 최대 7개
-          
-          boardLoading.classList.add('hidden');
-          boardContainer.classList.remove('hidden');
-          boardContainer.innerHTML = displayPosts.map(post => `
-            <article class="p-5 bg-white dark:bg-gray-900 border border-gray-150 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 group cursor-pointer" data-id="${post.id}">
-              <div class="flex items-start justify-between gap-4 mb-2">
-                <div class="flex items-center gap-2.5">
-                  <span class="toggle-arrow text-[10px] text-gray-400 group-hover:text-purple-600 transition-transform duration-200 inline-block">▶</span>
-                  <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition duration-150">${escapeHtml(post.title)}</h3>
-                </div>
-                <span class="text-[10px] text-gray-400 font-mono py-0.5 px-1.5 bg-gray-50 dark:bg-gray-950 rounded border border-gray-100 dark:border-gray-900">No. ${post.id}</span>
-              </div>
-              <div class="flex items-center gap-2 mt-3 text-xs text-gray-400 dark:text-gray-500">
-                <span class="font-medium text-gray-600 dark:text-gray-400">${escapeHtml(post.author)}</span>
-                <span>•</span>
-                <span>🕒 ${formatDate(post.created_at)}</span>
-              </div>
-              <div class="post-content-container hidden border-t border-gray-100 dark:border-gray-800 mt-3 pt-3 transition-all duration-300">
-                <p class="post-content-text text-gray-600 dark:text-gray-300 leading-relaxed whitespace-pre-line break-words text-sm"></p>
-              </div>
-            </article>
-          `).join('');
-        } else {
-          boardLoading.classList.add('hidden');
-          boardEmpty.classList.remove('hidden');
-        }
-      } catch {
-        boardLoading.classList.add('hidden');
-        boardEmpty.classList.remove('hidden');
-      }
-    }
-
-    // Set Listeners
-    if (boardContainer) {
-      boardContainer.addEventListener('click', (e) => {
-        const article = (e.target as HTMLElement).closest('article');
-        if (article && article.dataset.id) toggleBoardDetail(article.dataset.id, article);
-      });
-    }
-
-    // Run
-    loadBoard();
-  });
-</script>
-
 <style>
   :root {
-    --accent-gradient-strong: linear-gradient(
-      45deg,
-      #d648ff,
-      #00d1b7,
-      #d648ff
+    --accent-gradient: linear-gradient(
+      135deg,
+      #9333ea 0%,
+      #c084fc 40%,
+      #14b8a6 100%
     );
   }
 
   .text-gradient {
-    background-image: var(--accent-gradient-strong);
+    background-image: var(--accent-gradient);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
-    background-size: 400%;
+    background-size: 200%;
     background-position: 0%;
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 </style>

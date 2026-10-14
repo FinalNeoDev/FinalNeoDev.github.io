@@ -27,14 +27,13 @@ export default defineThemeConfig({
         href: '/',
       },
       {
-        type: 'link',
-        label: 'Blog',
-        href: '/blog',
-      },
-      {
         label: 'Portfolio',
         type: 'dropdown',
         items: [
+          {
+            label: 'All Projects',
+            href: '/#portfolio',
+          },
           {
             label: 'Korea Holidays',
             href: 'https://finalneodev.github.io/Korea_Holidays/',
@@ -49,13 +48,8 @@ export default defineThemeConfig({
             label: 'Korea Font',
             href: 'https://finalneodev.github.io/KERIS_OFL_fonts/',
             external: true,
-          }
-        ]
-      },
-      {
-        type: 'link',
-        label: 'Board',
-        href: '/board',
+          },
+        ],
       },
       {
         type: 'link',
@@ -70,18 +64,8 @@ export default defineThemeConfig({
   socials: [
     {
       label: 'GitHub',
-      href: 'https://github.com/incluud/',
+      href: 'https://github.com/FinalNeoDev',
       icon: 'lucide:github',
-    },
-    {
-      label: 'Bluesky',
-      href: 'https://bsky.app/profile/incluud.dev',
-      icon: 'lucide:bot-message-square',
-    },
-    {
-      label: 'Open Collective',
-      href: 'https://opencollective.com/incluud',
-      icon: 'lucide:hand-heart',
     },
   ],
 })
