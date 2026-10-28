@@ -58,6 +58,12 @@ import { Icon } from 'astro-icon/components'
       </li>
     )
   }
+  <li class="menu-item flex items-center">
+    <div class="inline-flex items-center bg-gray-100 dark:bg-gray-800 p-0.5 rounded-lg border border-gray-200 dark:border-gray-700 text-xs font-semibold">
+      <button id="btn-lang-ko" onclick="window.setSiteLanguage && window.setSiteLanguage('ko')" class="px-2 py-0.5 rounded-md transition-all text-white bg-purple-600 shadow-sm cursor-pointer">KO</button>
+      <button id="btn-lang-en" onclick="window.setSiteLanguage && window.setSiteLanguage('en')" class="px-2 py-0.5 rounded-md transition-all text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white cursor-pointer">EN</button>
+    </div>
+  </li>
   <li class="menu-item desktop-launcher">
     <LauncherTrigger launcherId="site-launcher" compact={true} gradientBorder={true} />
   </li>
