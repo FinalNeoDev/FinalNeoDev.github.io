@@ -1,7 +1,7 @@
 # 🚀 FinalNeo
 > **개발 · 테스트 · 서비스**의 모든 과정을 도전하고 기록하는 공간입니다.
 
-[![Website](https://img.shields.io/badge/Website-finalneodev.github.io-blue?style=flat-square&logo=github)](https://finalneodev.github.io)
+[![Website](https://img.shields.io/badge/Website-0bit.kr-blue?style=flat-square&logo=globe)](https://0bit.kr)
 
 ---
 
@@ -30,4 +30,4 @@
 - **Vision:** 사용자에게 선택받는 살아있는 서비스 운영
 
 ---
-Copyright © **FinalNeo** | [Visit Blog](https://finalneodev.github.io)
+Copyright © **FinalNeo** | [Visit Blog](https://0bit.kr)

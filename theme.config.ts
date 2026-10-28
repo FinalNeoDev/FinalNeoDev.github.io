@@ -36,20 +36,25 @@ export default defineThemeConfig({
           },
           {
             label: 'Korea Holidays',
-            href: 'https://finalneodev.github.io/Korea_Holidays/',
+            href: 'https://0bit.kr/Korea_Holidays/',
             external: true,
           },
           {
             label: 'Korea OT',
-            href: 'https://finalneodev.github.io/Korea_Holidays/overtime.html',
+            href: 'https://0bit.kr/Korea_Holidays/overtime.html',
             external: true,
           },
           {
             label: 'Korea Font',
-            href: 'https://finalneodev.github.io/KERIS_OFL_fonts/',
+            href: 'https://0bit.kr/KERIS_OFL_fonts/',
             external: true,
           },
         ],
+      },
+      {
+        type: 'link',
+        label: 'Posts',
+        href: '/posts',
       },
       {
         type: 'link',

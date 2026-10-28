@@ -1,0 +1,120 @@
+---
+import DefaultLayout from '@layouts/DefaultLayout.astro'
+
+interface MarkdownInstance {
+  frontmatter: {
+    title: string
+    description: string
+    category?: string
+    date: string
+    readTime?: string
+  }
+  url: string
+}
+
+const mdModules = import.meta.glob<MarkdownInstance>('./*.md', { eager: true })
+const sortedPosts = Object.values(mdModules).sort((a, b) => {
+  return new Date(b.frontmatter.date).getTime() - new Date(a.frontmatter.date).getTime()
+})
+---
+
+<DefaultLayout
+  title="Posts - FinalNeo Tech Blog"
+  description="0bit.kr 주요 웹 프로젝트의 개발 여정, 기술 아키텍처 및 웹 개발 노하우를 기록하는 공간입니다."
+>
+  <section class="py-16 md:py-24">
+    <div class="container max-w-5xl">
+      <!-- Header -->
+      <div class="mb-12 text-center md:text-left">
+        <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider text-purple-700 bg-purple-100 dark:bg-purple-950/60 dark:text-purple-300 mb-3">
+          Tech Blog & Architecture Notes
+        </span>
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+          Featured <span class="text-gradient">Posts</span>
+        </h1>
+        <p class="text-gray-600 dark:text-gray-300 text-base md:text-lg max-w-2xl leading-relaxed">
+          직접 기획하고 개발한 서비스들의 구현 배경, 법률·수학적 알고리즘, 그리고 웹 성능 및 SEO 최적화 과정을 기록합니다.
+        </p>
+      </div>
+
+      <!-- Posts List -->
+      <div class="grid gap-8 md:grid-cols-2">
+        {
+          sortedPosts.map((post) => (
+            <article class="p-7 md:p-8 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 rounded-2xl shadow-sm hover:shadow-lg hover:border-purple-300 dark:hover:border-purple-700/60 transition-all duration-200 group flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-3">
+                  <span class="inline-block px-2.5 py-0.5 rounded-md text-xs font-semibold bg-gray-100 dark:bg-gray-800 text-purple-700 dark:text-purple-300">
+                    {post.frontmatter.category || 'Tech'}
+                  </span>
+                  <div class="flex items-center gap-2 text-xs text-gray-400">
+                    <span>{post.frontmatter.readTime || '5분 읽기'}</span>
+                    <span>•</span>
+                    <time datetime={post.frontmatter.date}>{post.frontmatter.date}</time>
+                  </div>
+                </div>
+
+                <h2 class="text-xl md:text-2xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors leading-snug mb-3">
+                  <a href={post.url}>
+                    {post.frontmatter.title}
+                  </a>
+                </h2>
+
+                <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-6">
+                  {post.frontmatter.description}
+                </p>
+              </div>
+
+              <div class="pt-4 border-t border-gray-100 dark:border-gray-800/80 flex items-center justify-between">
+                <span class="text-xs text-gray-400 font-mono">0bit.kr{post.url}</span>
+                <a
+                  href={post.url}
+                  class="inline-flex items-center gap-1.5 text-sm font-semibold text-purple-600 dark:text-purple-400 group-hover:translate-x-1 transition-transform"
+                >
+                  <span>자세히 읽기</span>
+                  <span>→</span>
+                </a>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+
+      <!-- Bottom Navigation / Links -->
+      <div class="mt-16 p-8 bg-purple-50/60 dark:bg-purple-950/25 border border-purple-100 dark:border-purple-900/40 rounded-2xl text-center">
+        <h3 class="text-lg font-bold text-gray-900 dark:text-gray-100 mb-2">
+          더 많은 프로젝트가 궁금하신가요?
+        </h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+          Korea Holidays, Korea OT, Korea Font 등 실제로 동작하는 라이브 웹 서비스를 경험해보세요.
+        </p>
+        <a
+          href="/#portfolio"
+          class="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-purple-600 text-white font-semibold text-sm hover:bg-purple-700 shadow-md shadow-purple-600/20 transition-all"
+        >
+          <span>포트폴리오 보러가기</span>
+          <span>↓</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</DefaultLayout>
+
+<style>
+  :root {
+    --accent-gradient-strong: linear-gradient(
+      45deg,
+      #d648ff,
+      #00d1b7,
+      #d648ff
+    );
+  }
+
+  .text-gradient {
+    background-image: var(--accent-gradient-strong);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-size: 400%;
+    background-position: 0%;
+  }
+</style>
