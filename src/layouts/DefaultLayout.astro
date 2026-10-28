@@ -64,6 +64,18 @@ const imageUrl = new URL(imagePath, Astro.site).href
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8" />
+    <script is:inline>
+      (function() {
+        var dm = localStorage.getItem('darkMode');
+        if (dm === 'enabled') {
+          document.documentElement.classList.add('darkmode');
+          document.documentElement.style.colorScheme = 'dark';
+        } else {
+          document.documentElement.classList.remove('darkmode');
+          document.documentElement.style.colorScheme = 'light';
+        }
+      })();
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
 
